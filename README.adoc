@@ -4,23 +4,25 @@ Data import from relational databases to Neo4j.
 
 == Download & Install
 
-Download & unzip the latest `neo4j-etl-components.zip` from https://github.com/neo4j-contrib/neo4j-etl-components/releases
+Download & unzip the latest https://github.com/neo4j-contrib/neo4j-etl-components/releases/latest[neo4j-etl-components.zip].
+Once unzipped, download the proper JDBC Driver xref:jdbc-drivers[here] and add it to the `lib` folder.
 
 == Examples of command usage:
 
 .Minimal command line
 ----
-./bin/neo4j-etl mysql export  --user <user> --password <pwd> --database northwind \
+./bin/neo4j-etl { mysql | postgresql | oracle } export --url <url> --user <user> --password <pwd> \
  --destination $NEO4J_HOME/data/databases/graph.db/ --import-tool $NEO4J_HOME/bin  \
  --csv-directory /tmp/northwind
 ----
 
 .Full set of command line options
 ----
-./bin/neo4j-etl mysql export  --host 127.0.0.1 --port 3306 --user <user> --password <pwd> \
+./bin/neo4j-etl { mysql | postgresql | oracle } export --url <url> --user <user> --password <pwd> \
 --database <database> --destination $NEO4J_HOME/data/databases/graph.db/ \
---import-tool $NEO4J_HOME/bin  --csv-directory /tmp  \
---options-file ./import-tool-options.json --force --debug
+--import-tool $NEO4J_HOME/bin --csv-directory /tmp  \
+--options-file ./import-tool-options.json
+--force --debug
 ----
 
 For detailed usage see also the: http://neo4j-contrib.github.io/neo4j-etl-components#neo4j-etl-cli[tool documentation].

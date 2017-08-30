@@ -1,0 +1,74 @@
+NAME
+        neo4j-etl { mysql | postgresql | oracle } generate-metadata-mapping - Create MySQL to Neo4j
+        metadata mapping Json.
+
+SYNOPSIS
+        neo4j-etl { mysql | postgresql | oracle } generate-metadata-mapping
+                [ --url <url> ] [ {-h | --host} <hostname> ] [ {-p | --port} <port #> ]
+                [ {-d | --database} <name> {-s | --schema} <schema>
+                {-u | --user} <username> [ --password <password> ]
+                [ --debug ] [ --delimiter <delimiter> ]
+                [ {--exclusion-mode | --exc} <exclude|include|none(default)> ]
+                [ --options-file <file> ] [ --quote <quote> ]
+                [ {--relationship-name | --rel-name} <table(default)|column> ]
+                [ --tiny-int <byte(default)|boolean> ] [--] [ <table1 table2 ...>... ]
+
+OPTIONS
+        --url <url>
+            Database connection URL.
+            This parameter is alternative to `--host`, `--port` and `--database`.
+
+        -h <name>, --host <name>
+            Host to use for connection to RDBMS.
+
+        -p <#>, --port <#>
+            Port number to use for connection to RDBMS.
+
+        -d <name>, --database <name>
+            Database name.
+
+        -u <name>, --user <name>
+            User for login to RDBMS.
+
+        --password <name>
+            Password for login to RDBMS.
+
+        -s <schema>, --schema <schema>
+            Schema to be exported.
+
+        --debug
+            Print detailed diagnostic output.
+
+        --delimiter <delimiter>
+            Delimiter to separate fields in CSV.
+
+        --exclusion-mode <exclude|include|none(default)>, --exc
+        <exclude|include|none(default)>
+            Specifies how to handle table exclusion. Options are mutually
+            exclusive.exclude: Excludes specified tables from the process. All
+            other tables will be included.include: Includes specified tables
+            only. All other tables will be excluded.none: All tables are
+            included in the process.
+
+        --options-file <file>
+            Path to file containing Neo4j import tool options.
+
+        --quote <quote>
+            Character to treat as quotation character for values in CSV data.
+
+        --relationship-name <table(default)|column>, --rel-name
+        <table(default)|column>
+            Specifies whether to get the name for relationships from table names
+            or column names.
+
+        --tiny-int <byte(default)|boolean>
+            Specifies whether to convert TinyInt to byte or boolean
+
+        --
+            This option can be used to separate command-line options from the
+            list of arguments (useful when arguments might be mistaken for
+            command-line options)
+
+        <table1 table2 ...>
+            Tables to be excluded/included
+

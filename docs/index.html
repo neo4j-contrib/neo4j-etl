@@ -432,7 +432,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="sect2">
 <h3 id="_download_install">Download &amp; Install</h3>
 <div class="paragraph">
-<p>Download &amp; unzip the latest <code>neo4j-etl-components.zip</code> from <a href="https://github.com/neo4j-contrib/neo4j-etl-components/releases" class="bare">https://github.com/neo4j-contrib/neo4j-etl-components/releases</a></p>
+<p>Download &amp; unzip the latest <a href="https://github.com/neo4j-contrib/neo4j-etl-components/releases/latest">neo4j-etl-components.zip</a>.
+Once unzipped, download the proper JDBC Driver <a href="#jdbc-drivers">here</a> and add it to the <code>lib</code> folder.</p>
 </div>
 </div>
 <div class="sect2">
@@ -440,7 +441,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="listingblock">
 <div class="title">Minimal command line</div>
 <div class="content">
-<pre>./bin/neo4j-etl mysql export  --user &lt;user&gt; --password &lt;pwd&gt; --database northwind \
+<pre>./bin/neo4j-etl { mysql | postgresql | oracle } export --url &lt;url&gt; --user &lt;user&gt; --password &lt;pwd&gt; \
  --destination $NEO4J_HOME/data/databases/graph.db/ --import-tool $NEO4J_HOME/bin  \
  --csv-directory /tmp/northwind</pre>
 </div>
@@ -448,10 +449,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="listingblock">
 <div class="title">Full set of command line options</div>
 <div class="content">
-<pre>./bin/neo4j-etl mysql export  --host 127.0.0.1 --port 3306 --user &lt;user&gt; --password &lt;pwd&gt; \
+<pre>./bin/neo4j-etl { mysql | postgresql | oracle } export --url &lt;url&gt; --user &lt;user&gt; --password &lt;pwd&gt; \
 --database &lt;database&gt; --destination $NEO4J_HOME/data/databases/graph.db/ \
---import-tool $NEO4J_HOME/bin  --csv-directory /tmp  \
---options-file ./import-tool-options.json --force --debug</pre>
+--import-tool $NEO4J_HOME/bin --csv-directory /tmp  \
+--options-file ./import-tool-options.json
+--force --debug</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -556,7 +558,7 @@ It applies some simple rules for transforming the relational model.</p>
 <p>Support on Linux</p>
 </li>
 <li>
-<p>Support MySQL</p>
+<p>Support MySQL, PostgreSQL, Oracle</p>
 </li>
 <li>
 <p>Support user specified JDBC drivers</p>
@@ -623,11 +625,43 @@ Transformations for names, data, links</p>
 And also to drive the export from the relational and import into Neo4j database.</p>
 </div>
 <div class="paragraph">
-<p>You can get the <a href="http://github.com/neo4j-contrib/neo4j-etl-components/releases">latest version of the import tool from GitHub</a>.</p>
+<p>It supports <strong>MySQL</strong>, <strong>PostgreSQL</strong> and <strong>Oracle</strong> relational databases.</p>
 </div>
 <div class="paragraph">
-<p>Just download and uncompress the zip and you&#8217;re ready to go.</p>
+<p>You can get the <a href="http://github.com/neo4j-contrib/neo4j-etl-components/releases/latest">latest version of the import tool from GitHub</a>.</p>
 </div>
+<div class="paragraph">
+<p>Once downloaded and uncompressed the zip, you also need download the proper JDBC Driver and add it to the <code>lib</code> folder.</p>
+</div>
+<div class="paragraph">
+<p>You can follow the proper link in the below table in order to download the proper driver jar</p>
+</div>
+<table class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Vendor</th>
+<th class="tableblock halign-left valign-top">JDBC Driver URL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://www.mysql.com/">MySql</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="http://dev.mysql.com/downloads/connector/j/" class="bare">http://dev.mysql.com/downloads/connector/j/</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="http://www.postgresql.com/">PostgreSql</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://jdbc.postgresql.org/download.html" class="bare">https://jdbc.postgresql.org/download.html</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://www.oracle.com/">Oracle</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="http://www.oracle.com/technetwork/database/features/jdbc/default-2280470.html" class="bare">http://www.oracle.com/technetwork/database/features/jdbc/default-2280470.html</a></p></td>
+</tr>
+</tbody>
+</table>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -643,23 +677,24 @@ For very large databases make sure to have enough disk-space for the CSV export 
 <div class="listingblock">
 <div class="title">Simple Example Session</div>
 <div class="content">
-<pre>export NEO4J_HOME=/path/to/neo4j-enterprise-3.0.4
+<pre>export NEO4J_HOME=/path/to/neo4j-enterprise-3.1.3
 
 mkdir -p /tmp/northwind
 
-./bin/neo4j-etl mysql generate-metadata-mapping --database northwind --user root &gt; /tmp/northwind/mapping.json
-# Creating MySQL to CSV mappings...
+./bin/neo4j-etl { mysql | postgresql | oracle } generate-metadata-mapping --database northwind --user root &gt; /tmp/northwind/mapping.json
+# Creating RDBMS to CSV mappings...
 
 echo '{"multiline-fields":"true"}' &gt; /tmp/northwind/options.json
 
-./bin/neo4j-etl mysql export --database northwind --user root \
+./bin/neo4j-etl { mysql | postgresql | oracle } export --database northwind --user root \
 --destination $NEO4J_HOME/data/databases/graph.db/ --import-tool $NEO4J_HOME/bin  \
 --csv-directory /tmp/northwind --mapping-file /tmp/northwind/mapping.json --options-file /tmp/northwind/options.json \
 --force --quote '"'
 
 # - Reading options from file /tmp/northwind/options.json.
 # - Reading metadata mapping from file: /tmp/northwind/mapping.json
-# Exporting from MySQL to CSV...
+# Exporting from RDBMS to CSV...
+
 # CSV directory: /tmp/northwind/csv-006
 # - Writing CSV headers for node northwind.Territories
 # - Writing CSV data for node northwind.Territories
@@ -667,7 +702,7 @@ echo '{"multiline-fields":"true"}' &gt; /tmp/northwind/options.json
 # - Writing CSV headers for relationship northwind.Employees.EmployeeID_northwind.Employees.ReportsTo
 # - Writing CSV data for relationship northwind.Employees.EmployeeID_northwind.Employees.ReportsTo
 # Creating Neo4j store from CSV...
-# /Users/mh/v/neo4j-enterprise-3.0.4/data/databases/graph.db
+# /Users/mh/v/neo4j-enterprise-3.1.3/data/databases/graph.db
 
 
 $NEO4J_HOME/bin/neo4j-shell -path $NEO4J_HOME/data/databases/graph.db/ -c 'MATCH (n) RETURN labels(n), count(*);'
@@ -689,7 +724,45 @@ $NEO4J_HOME/bin/neo4j-shell -path $NEO4J_HOME/data/databases/graph.db/ -c 'MATCH
 </div>
 </div>
 <div class="sect2">
-<h3 id="_help_command">help command</h3>
+<h3 id="_rdbms_command">RDBMS Command</h3>
+<div class="listingblock">
+<div class="content">
+<pre>NAME
+        neo4j-etl { mysql | postgresql | oracle }  - Export tools for MySQL, PostgreSQL and Oracle RDBMS.
+
+SYNOPSIS
+        neo4j-etl { mysql | postgresql | oracle } { export | generate-metadata-mapping | help* } [--]
+                [cmd-options] &lt;cmd-args&gt;
+
+        Where command-specific options [cmd-options] are:
+            export: [ --debug ] [ --url &lt;url&gt; ] [ {-h | --host} &lt;hostname&gt; ] [ {-p | --port} &lt;port #&gt; ]
+                    {-d | --database} &lt;name&gt; [ {-s | --schema} &lt;schema&gt; ]
+                    {-u | --user} &lt;username&gt; [ --password &lt;password&gt; ]
+                    [ --options-file &lt;file&gt; ] --destination &lt;directory&gt;  [ --delimiter &lt;character&gt; ]
+                    [ --mapping-file &lt;file|stdin&gt; ] [ --quote &lt;character&gt; ]
+                    [ {--exclusion-mode | --exc} &lt;exclude|include|none(default)&gt; ]
+                    --import-tool &lt;directory&gt; [ {--relationship-name | --rel-name} &lt;table(default)|column&gt; ]
+                    [ {--tiny-int | --tiny} &lt;byte(default)|boolean&gt; ] --csv-directory &lt;directory&gt; [ --force ]
+            generate-metadata-mapping: [ --debug ] [ {-url} &lt;url&gt; ] [ {-h | --host} &lt;name&gt; ] [ {-p | --port} &lt;port #&gt; ]
+                    {-d | --database} &lt;name&gt; {-s | --schema} &lt;schema&gt;
+                    {-u | --user} &lt;name&gt; [ --password &lt;name&gt; ]
+                    [ --options-file &lt;file&gt; ] [ {--relationship-name | --rel-name} &lt;table(default)|column&gt; ]
+                    [ --tiny-int &lt;byte(default)|boolean&gt; ] [ --delimiter &lt;delimiter&gt; ]
+                    [ --quote &lt;quote&gt; ] [ {--exclusion-mode | --exc} &lt;exclude|include|none(default)&gt; ]
+            help:
+
+        Where command-specific arguments &lt;cmd-args&gt; are:
+            export: [ &lt;table1 table2 ...&gt;... ]
+            generate-metadata-mapping: [ &lt;table1 table2 ...&gt;... ]
+            help: [ &lt;command&gt;... ]
+
+        Where * indicates the default command(s)
+        See 'neo4j-etl help { mysql | postgresql | oracle } &lt;command&gt;' for more information on a specific command.</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="__help_command">'help' Command</h3>
 <div class="listingblock">
 <div class="content">
 <pre>NAME
@@ -709,60 +782,46 @@ OPTIONS
 </div>
 </div>
 <div class="sect2">
-<h3 id="_mysql_command">mysql command</h3>
+<h3 id="__generate_metadata_mapping_command">'generate-metadata-mapping' Command</h3>
 <div class="listingblock">
 <div class="content">
 <pre>NAME
-        neo4j-etl mysql - MySQL export tools.
-
-SYNOPSIS
-        neo4j-etl mysql { export | generate-metadata-mapping | help* } [--]
-                [cmd-options] &lt;cmd-args&gt;
-
-        Where command-specific options [cmd-options] are:
-            export: [ --debug ] [ --password &lt;password&gt; ] [ --options-file &lt;file&gt; ]
-                    --destination &lt;directory&gt; {-u | --user} &lt;username&gt; [ --delimiter &lt;character&gt; ]
-                    {-d | --database} &lt;name&gt; [ --mapping-file &lt;file|stdin&gt; ] [ --quote &lt;character&gt; ]
-                    [ {--exclusion-mode | --exc} &lt;exclude|include|none(default)&gt; ]
-                    --import-tool &lt;directory&gt; [ {--relationship-name | --rel-name} &lt;table(default)|column&gt; ]
-                    [ {-h | --host} &lt;hostname&gt; ] [ {--tiny-int | --tiny} &lt;byte(default)|boolean&gt; ]
-                    [ {-p | --port} &lt;port #&gt; ] --csv-directory &lt;directory&gt; [ --force ]
-            generate-metadata-mapping: [ --debug ] [ --password &lt;name&gt; ] [ {--relationship-name | --rel-name} &lt;table(default)|column&gt; ]
-                    [ --options-file &lt;file&gt; ] [ {-h | --host} &lt;name&gt; ] {-u | --user}
-                    &lt;name&gt; [ --tiny-int &lt;byte(default)|boolean&gt; ] [ --delimiter &lt;delimiter&gt; ]
-                    {-d | --database} &lt;name&gt; [ {-p | --port} &lt;#&gt; ] [ --quote &lt;quote&gt; ] [ {--exclusion-mode | --exc} &lt;exclude|include|none(default)&gt; ]
-            help:
-
-        Where command-specific arguments &lt;cmd-args&gt; are:
-            export: [ &lt;table1 table2 ...&gt;... ]
-            generate-metadata-mapping: [ &lt;table1 table2 ...&gt;... ]
-            help: [ &lt;command&gt;... ]
-
-        Where * indicates the default command(s)
-        See 'neo4j-etl help mysql &lt;command&gt;' for more information on a specific command.</pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_mysql_generate_metadata_mapping_command">mysql generate-metadata-mapping command</h3>
-<div class="listingblock">
-<div class="content">
-<pre>NAME
-        neo4j-etl mysql generate-metadata-mapping - Create MySQL to Neo4j
+        neo4j-etl { mysql | postgresql | oracle } generate-metadata-mapping - Create MySQL to Neo4j
         metadata mapping Json.
 
 SYNOPSIS
-        neo4j-etl mysql generate-metadata-mapping {-d | --database} &lt;name&gt;
+        neo4j-etl { mysql | postgresql | oracle } generate-metadata-mapping
+                [ --url &lt;url&gt; ] [ {-h | --host} &lt;hostname&gt; ] [ {-p | --port} &lt;port #&gt; ]
+                [ {-d | --database} &lt;name&gt; {-s | --schema} &lt;schema&gt;
+                {-u | --user} &lt;username&gt; [ --password &lt;password&gt; ]
                 [ --debug ] [ --delimiter &lt;delimiter&gt; ]
                 [ {--exclusion-mode | --exc} &lt;exclude|include|none(default)&gt; ]
-                [ {-h | --host} &lt;name&gt; ] [ --options-file &lt;file&gt; ] [ {-p | --port} &lt;#&gt; ]
-                [ --password &lt;name&gt; ] [ --quote &lt;quote&gt; ]
+                [ --options-file &lt;file&gt; ] [ --quote &lt;quote&gt; ]
                 [ {--relationship-name | --rel-name} &lt;table(default)|column&gt; ]
-                [ --tiny-int &lt;byte(default)|boolean&gt; ] {-u | --user} &lt;name&gt; [--] [ &lt;table1 table2 ...&gt;... ]
+                [ --tiny-int &lt;byte(default)|boolean&gt; ] [--] [ &lt;table1 table2 ...&gt;... ]
 
 OPTIONS
+        --url &lt;url&gt;
+            Database connection URL.
+            This parameter is alternative to `--host`, `--port` and `--database`.
+
+        -h &lt;name&gt;, --host &lt;name&gt;
+            Host to use for connection to RDBMS.
+
+        -p &lt;#&gt;, --port &lt;#&gt;
+            Port number to use for connection to RDBMS.
+
         -d &lt;name&gt;, --database &lt;name&gt;
-            MySQL database.
+            Database name.
+
+        -u &lt;name&gt;, --user &lt;name&gt;
+            User for login to RDBMS.
+
+        --password &lt;name&gt;
+            Password for login to RDBMS.
+
+        -s &lt;schema&gt;, --schema &lt;schema&gt;
+            Schema to be exported.
 
         --debug
             Print detailed diagnostic output.
@@ -778,17 +837,8 @@ OPTIONS
             only. All other tables will be excluded.none: All tables are
             included in the process.
 
-        -h &lt;name&gt;, --host &lt;name&gt;
-            Host to use for connection to MySQL.
-
         --options-file &lt;file&gt;
             Path to file containing Neo4j import tool options.
-
-        -p &lt;#&gt;, --port &lt;#&gt;
-            Port number to use for connection to MySQL.
-
-        --password &lt;name&gt;
-            Password for login to MySQL.
 
         --quote &lt;quote&gt;
             Character to treat as quotation character for values in CSV data.
@@ -801,9 +851,6 @@ OPTIONS
         --tiny-int &lt;byte(default)|boolean&gt;
             Specifies whether to convert TinyInt to byte or boolean
 
-        -u &lt;name&gt;, --user &lt;name&gt;
-            User for login to MySQL.
-
         --
             This option can be used to separate command-line options from the
             list of arguments (useful when arguments might be mistaken for
@@ -815,34 +862,54 @@ OPTIONS
 </div>
 </div>
 <div class="sect2">
-<h3 id="_mysql_export_command">mysql-export command</h3>
+<h3 id="__export_command">'export' Command</h3>
 <div class="listingblock">
 <div class="content">
 <pre>NAME
-        neo4j-etl mysql export - Export from MySQL.
+        neo4j-etl { mysql | postgresql | oracle } export - Export from MySQL, PostgreSQL, Oracle RDBMS.
 
 SYNOPSIS
-        neo4j-etl mysql export --csv-directory &lt;directory&gt;
-                {-d | --database} &lt;name&gt; [ --debug ] [ --delimiter &lt;character&gt; ]
-                --destination &lt;directory&gt;
+        neo4j-etl { mysql | postgresql | oracle } export
+                [ --url &lt;url&gt; ] [ {-h | --host} &lt;hostname&gt; ] [ {-p | --port} &lt;port #&gt; ]
+                [ {-d | --database} &lt;name&gt; {-s | --schema} &lt;schema&gt;
+                {-u | --user} &lt;username&gt; [ --password &lt;password&gt; ]
+                [ --debug ] [ --delimiter &lt;character&gt; ] --destination &lt;directory&gt;
                 [ {--exclusion-mode | --exc} &lt;exclude|include|none(default)&gt; ]
-                [ --force ] [ {-h | --host} &lt;hostname&gt; ] --import-tool &lt;directory&gt;
+                [ --force ] --import-tool &lt;directory&gt;
                 [ --mapping-file &lt;file|stdin&gt; ] [ --options-file &lt;file&gt; ]
-                [ {-p | --port} &lt;port #&gt; ] [ --password &lt;password&gt; ]
-                [ --quote &lt;character&gt; ]
+                [ --quote &lt;character&gt; ] --csv-directory &lt;directory&gt;
                 [ {--relationship-name | --rel-name} &lt;table(default)|column&gt; ]
                 [ {--tiny-int | --tiny} &lt;byte(default)|boolean&gt; ]
-                {-u | --user} &lt;username&gt; [--] [ &lt;table1 table2 ...&gt;... ]
+                [--] [ &lt;table1 table2 ...&gt;... ]
 
 OPTIONS
-        --csv-directory &lt;directory&gt;
-            Path to directory for intermediate CSV files.
+        --url &lt;name&gt;
+            Database connection URL.
+            This parameter is alternative to `--host`, `--port` and `--database`.
+
+        -h &lt;hostname&gt;, --host &lt;hostname&gt;
+            Host to use for connection to RDBMS.
+
+        -p &lt;port #&gt;, --port &lt;port #&gt;
+            Port number to use for connection to RDBMS.
 
         -d &lt;name&gt;, --database &lt;name&gt;
-            MySQL database.
+            Database name.
+
+        -u &lt;username&gt;, --user &lt;username&gt;
+            User for login to RDBMS.
+
+        --password &lt;password&gt;
+            Password for login to RDBMS.
+
+        -s &lt;schema&gt;, --schema &lt;schema&gt;
+            Schema to be exported.
 
         --debug
             Print detailed diagnostic output.
+
+        --csv-directory &lt;directory&gt;
+            Path to directory for intermediate CSV files.
 
         --delimiter &lt;character&gt;
             Delimiter to separate fields in CSV.
@@ -861,9 +928,6 @@ OPTIONS
         --force
             Force delete destination store directory if it already exists.
 
-        -h &lt;hostname&gt;, --host &lt;hostname&gt;
-            Host to use for connection to MySQL.
-
         --import-tool &lt;directory&gt;
             Path to directory containing Neo4j import tool.
 
@@ -873,12 +937,6 @@ OPTIONS
 
         --options-file &lt;file&gt;
             Path to file containing Neo4j import tool options.
-
-        -p &lt;port #&gt;, --port &lt;port #&gt;
-            Port number to use for connection to MySQL.
-
-        --password &lt;password&gt;
-            Password for login to MySQL.
 
         --quote &lt;character&gt;
             Character to treat as quotation character for values in CSV data.
@@ -891,9 +949,6 @@ OPTIONS
         --tiny-int &lt;byte(default)|boolean&gt;, --tiny &lt;byte(default)|boolean&gt;
             Specifies whether to get the convert TinyInt to byte or boolean
 
-        -u &lt;username&gt;, --user &lt;username&gt;
-            User for login to MySQL.
-
         --
             This option can be used to separate command-line options from the
             list of arguments (useful when arguments might be mistaken for
@@ -901,6 +956,155 @@ OPTIONS
 
         &lt;table1 table2 ...&gt;
             Tables to be excluded/included</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_example_session_docker_northwind">Example Session: Docker + Northwind</h3>
+<div class="paragraph">
+<p>This example session is based on the Northwind example dataset.</p>
+</div>
+<div class="paragraph">
+<p>DDL scripts are available here:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://raw.githubusercontent.com/neo4j-contrib/neo4j-etl-components/master/neo4j-etl-it/src/main/resources/scripts/mysql/northwind.sql">MySQL</a></p>
+</li>
+<li>
+<p><a href="https://raw.githubusercontent.com/neo4j-contrib/neo4j-etl-components/master/neo4j-etl-it/src/main/resources/scripts/postgresql/northwind.sql">PostgreSQL</a></p>
+</li>
+<li>
+<p><a href="https://raw.githubusercontent.com/neo4j-contrib/neo4j-etl-components/master/neo4j-etl-it/src/main/resources/scripts/oracle/northwind.sql">Oracle</a></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<div class="title">MySQL</div>
+<p>Download, start and configure the docker container with MySQL:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>~: docker pull mysql
+
+~: docker run --name neo4j-etl-mysql -e MYSQL_ROOT_PASSWORD=admin -e MYSQL_DATABASE=northwind -e MYSQL_USER=neo4j -e MYSQL_PASSWORD=neo4j -d -p 3306:3306 mysql:latest
+
+~: docker exec -it neo4j-etl-mysql bash
+root@eb6f279fdb88:/# mysql -u root -p
+Enter password: admin
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 3
+Server version: 5.7.18 MySQL Community Server (GPL)
+
+Copyright (c) 2000, 2017, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql&gt; grant all privileges on *.* to 'neo4j'@'%' with grant option;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql&gt; quit;
+Bye
+root@bf99fbc0d31c:/# exit
+exit
+
+Load the database via the following sql script:
+https://raw.githubusercontent.com/neo4j-contrib/neo4j-etl-components/master/neo4j-etl-it/src/main/resources/scripts/mysql/northwind.sql
+
+~: export NEO4J_HOME=/path/to/neo4j-enterprise-3.1.3
+
+~: mkdir -p /tmp/northwind
+
+~: echo '{"multiline-fields":"true"}' &gt; /tmp/northwind/options.json
+
+~: ./bin/neo4j-etl mysql export --url jdbc:mysql://localhost:5433/northwind?autoReconnect=true&amp;useSSL=false \
+      --user neo4j --password neo4j --import-tool $NEO4J_HOME/bin \
+      --options-file /tmp/northwind/options.json --csv-directory /tmp/northwind \
+      --destination $NEO4J_HOME/data/databases/graph.db/ --quote '"' --force</pre>
+</div>
+</div>
+<div class="paragraph">
+<div class="title">PostgreSQL</div>
+<p>Download, start and configure the docker container with PostgreSQL 9.6.2:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>~: docker pull postgres
+
+~: docker run --name neo4j-etl-postgres -e POSTGRES_USER=neo4j -e POSTGRES_PASSWORD=neo4j -d -p 5433:5432 postgres
+
+~: docker run -it --rm --link neo4j-etl-postgres:postgres postgres psql -h postgres -U neo4j
+Password for user neo4j:
+psql (9.6.2)
+Type "help" for help.
+
+neo4j=# DROP DATABASE IF EXISTS northwind;
+neo4j=# CREATE DATABASE northwind WITH OWNER 'neo4j' ENCODING 'UTF8' LC_COLLATE = 'en_US.utf8' LC_CTYPE = 'en_US.utf8';
+neo4j=# \q
+
+Load the database via the following sql script:
+https://raw.githubusercontent.com/neo4j-contrib/neo4j-etl-components/master/neo4j-etl-it/src/main/resources/scripts/postgresql/northwind.sql
+
+~: export NEO4J_HOME=/path/to/neo4j-enterprise-3.1.3
+
+~: mkdir -p /tmp/northwind
+
+~: echo '{"multiline-fields":"true"}' &gt; /tmp/northwind/options.json
+
+~: ./bin/neo4j-etl postgresql export --url jdbc:postgresql://localhost:5433/northwind?ssl=false \
+      --user neo4j --password neo4j --import-tool $NEO4J_HOME/bin \
+      --options-file /tmp/northwind/options.json --csv-directory /tmp/northwind \
+      --destination $NEO4J_HOME/data/databases/graph.db/ --quote '"' --force</pre>
+</div>
+</div>
+<div class="paragraph">
+<div class="title">Oracle</div>
+<p>Download, start and configure the docker container with Oracle XE 11g:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>~: docker pull wnameless/oracle-xe-11g
+
+~: docker run --name neo4j-etl-oracle -d -p 49160:22 -p 49161:1521 wnameless/oracle-xe-11g
+
+~: ssh root@localhost -p 49160
+root@localhost's password: admin
+
+Welcome to Ubuntu 16.04.1 LTS (GNU/Linux 4.9.13-moby x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/advantage
+Last login: Mon May  1 17:32:48 2017 from 172.17.0.1
+
+root@692c446a274b:~# wget https://raw.githubusercontent.com/neo4j-contrib/neo4j-etl-components/master/neo4j-etl-it/src/main/resources/scripts/oracle/northwind.sql
+
+root@692c446a274b:~# sqlplus system/oracle
+
+SQL&gt; CREATE USER northwind IDENTIFIED BY northwind;
+SQL&gt; GRANT DBA TO northwind;
+SQL&gt; CONN northwind/northwind;
+SQL&gt; SET sqlblanklines ON;
+SQL&gt; @northwind.sql
+SQL&gt; quit;
+
+root@692c446a274b:~# exit
+
+~: export NEO4J_HOME=/path/to/neo4j-enterprise-3.1.3
+
+~: mkdir -p /tmp/northwind
+
+~: echo '{"multiline-fields":"true"}' &gt; /tmp/northwind/options.json
+
+~: ./bin/neo4j-etl oracle export --url jdbc:oracle:thin:@localhost:49161:XE \
+      --schema northwind --user northwind --password northwind --import-tool $NEO4J_HOME/bin \
+      --options-file /tmp/northwind/options.json --csv-directory /tmp/northwind \
+      --destination $NEO4J_HOME/data/databases/graph.db/ --quote '"' --force</pre>
 </div>
 </div>
 </div>
@@ -914,7 +1118,7 @@ OPTIONS
 <div class="ulist">
 <ul>
 <li>
-<p>Generic MySql database mapping based on the following rules</p>
+<p>Generic { MySql | PostgreSQL | Oracle } database mapping based on the following rules</p>
 </li>
 <li>
 <p>A <em>table</em> with a foreign key is treated as a <em>Join</em> and imported as a <em>node</em> with a <em>relationship</em></p>
@@ -1032,7 +1236,7 @@ OPTIONS
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2017-08-30 16:45:57 CEST
+Last updated 2017-08-30 16:59:36 CEST
 </div>
 </div>
 </body>

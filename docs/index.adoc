@@ -6,7 +6,6 @@ include::../README.adoc[lines=2..-1,leveloffset=+1]
 
 == Introduction
 
-
 The Neo4j ETL components, especially the `neo4j-etl` tool, can be used to import well modeled (i.e. normalized) relational data into Neo4j.
 It applies some simple rules for transforming the relational model.
 
@@ -17,8 +16,6 @@ The process as outlined below:
 3. Export relational data to CSV
 4. Generate Mapping Headers
 5. Import into Neo4j using the bulk `neo4j-import` tool
-
-
 
 == Architecture Diagram
 
@@ -37,7 +34,7 @@ image::neo4j-etl-architecture.png[]
 * Build indexes
 * Non-trivial datatypes (dates, binary)
 * Support on Linux
-* Support MySQL 
+* Support MySQL, PostgreSQL, Oracle
 * Support user specified JDBC drivers
 
 === Plans for the Future
@@ -65,7 +62,7 @@ include::neo4j-etl.adoc[]
 
 === Inferring Schema with Mapping Rules (generate-metadata-mapping)
 
-* Generic MySql database mapping based on the following rules
+* Generic { MySql | PostgreSQL | Oracle } database mapping based on the following rules
 * A _table_ with a foreign key is treated as a _Join_ and imported as a _node_ with a _relationship_
 * Ex: `*Person* -> Address` is imported as `*(Person)-[:ADDRESS_ID]->*(Address)`
 * A _table_ that has two foreign keys is imported as a _JoinTable_ and imported as a _relationship_
