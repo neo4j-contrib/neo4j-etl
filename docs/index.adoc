@@ -1,0 +1,109 @@
+= Neo4j ETL Components
+
+== Overview
+
+include::../README.adoc[lines=2..-1,leveloffset=+1]
+
+== Introduction
+
+
+The Neo4j ETL components, especially the `neo4j-etl` tool, can be used to import well modeled (i.e. normalized) relational data into Neo4j.
+It applies some simple rules for transforming the relational model.
+
+The process as outlined below:
+
+1. Read database metadata and generate mapping.json
+2. Optionally edit mapping.json
+3. Export relational data to CSV
+4. Generate Mapping Headers
+5. Import into Neo4j using the bulk `neo4j-import` tool
+
+
+
+== Architecture Diagram
+
+image::neo4j-etl-architecture.png[]
+
+=== What it is
+
+* Command-Line tools 
+* Java API/library
+* Infer Schema to mapping file
+* Filter and merge strategies
+* Describe indexes
+* Non-trivial datatypes (dates, binary)
+* Read mapping file to export data from other databases then
+* Import into Neo via Neo4j Import Tool
+* Build indexes
+* Non-trivial datatypes (dates, binary)
+* Support on Linux
+* Support MySQL 
+* Support user specified JDBC drivers
+
+=== Plans for the Future
+
+* UI tool to modify mappings - currently manual editing
+* Custom Mapping Rules +
+ Transformations for names, data, links
+* Online Synchronisation, Import into existing database - currently, only supporting initial import
+* Exemplary integration into a 3rd party ETL pipeline
+
+=== Who is it for
+
+* Developer learning or playing with Neo4j for initial data import
+* Partners providing data integration with Neo4j
+* Enterprise developers building applications based on well modeled relational data
+
+=== Open Questions
+
+* Date and binary datatypes
+* Security (secure connections, handling of passwords, encrypting data?)
+
+include::neo4j-etl.adoc[]
+
+== Capabilities
+
+=== Inferring Schema with Mapping Rules (generate-metadata-mapping)
+
+* Generic MySql database mapping based on the following rules
+* A _table_ with a foreign key is treated as a _Join_ and imported as a _node_ with a _relationship_
+* Ex: `*Person* -> Address` is imported as `*(Person)-[:ADDRESS_ID]->*(Address)`
+* A _table_ that has two foreign keys is imported as a _JoinTable_ and imported as a _relationship_
+* Ex: `Student <- *Student_Course* -> Course` is imported as  +
+`(Student) -[*:STUDENT_COURSE*]-> (Course)`
+* A _table_ that has more than two foreign keys is treated as an _intermediate node_ and imported as _node with multiple relationships_
+* Ex: `*Order_Detail* -> Shipping_Address, *Order_Detail* -> Payment_Information, *Order_Detail* -> Shipment_Instructions` is imported as, +
+ `(Shipping_Address) *-[:SHIPPING]-> (Order_Detail)*` +
+ `(Payment_Information) *-[:PAYMENT]-> (Order_Detail)*` +
+ `(Shipment_Instructions) *-[:SHIPMENT]-> (Order_Detail)*` +
+
+
+* Resolve relationships through composite keys.
+* Support most of the data types.
+** _TinyInt_ can be imported as either _Byte_ or as a _Boolean_ _(This is to support boolean values being saved in mysql as TinyInt)_
+** _Dates_ are imported as _String_
+** _Blobs_ are skipped while importing until the import-tool supports binary array data.
+** _Decimal to be confirmed._
+
+* Relationship names can either take _column name_ or the _table that is being referred to_
+** `--relationship-name=table` then a `Person->Address` will become `(Person)-[*:ADDRESS*]->(Address)`
+** `--relationship-name=column` will become `(Person)-[*:ADDRESS_ID*]->(Address)`
+
+* Filter tables that you want to include or exclude using `--include` and `--exclude`
+
+* TODO: Filter columns that you want to include or exclude using `--include` and `--exclude`
+
+* TODO: Retaining natural keys(marked as PrimaryKeys and ForeignKeys) as needed using <TBA> flag
+** A Foreign Key is usually used to create a relationship between 2 nodes without being saved as a property. 
+** With this flag, the node would keep that value as a property. 
+** Ex: A loan has the SSN of the loan applicant which would normally be used to connect the `Loan` and `Person` nodes. 
+** With this flag the `Loan` node will also keep the `SSN` as a property.
+
+=== Exporting Data (export)
+
+* Generate CSV files from relational source as outlined by `mappings.json` 
+** TODO: Use a streaming api that is more performant
+* Import CSV using `neo4j-import` providing the correct labels and rel-types and headers headers
+
+* TODO: Build indexes automatically as part of import
+* TODO: Missing ability to pass options to `neo4j-import` tool as a file instead of command line arguments

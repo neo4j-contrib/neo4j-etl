@@ -1,0 +1,28 @@
+NAME
+        neo4j-etl mysql - MySQL export tools.
+
+SYNOPSIS
+        neo4j-etl mysql { export | generate-metadata-mapping | help* } [--]
+                [cmd-options] <cmd-args>
+
+        Where command-specific options [cmd-options] are:
+            export: [ --debug ] [ --password <password> ] [ --options-file <file> ]
+                    --destination <directory> {-u | --user} <username> [ --delimiter <character> ]
+                    {-d | --database} <name> [ --mapping-file <file|stdin> ] [ --quote <character> ]
+                    [ {--exclusion-mode | --exc} <exclude|include|none(default)> ]
+                    --import-tool <directory> [ {--relationship-name | --rel-name} <table(default)|column> ]
+                    [ {-h | --host} <hostname> ] [ {--tiny-int | --tiny} <byte(default)|boolean> ]
+                    [ {-p | --port} <port #> ] --csv-directory <directory> [ --force ]
+            generate-metadata-mapping: [ --debug ] [ --password <name> ] [ {--relationship-name | --rel-name} <table(default)|column> ]
+                    [ --options-file <file> ] [ {-h | --host} <name> ] {-u | --user}
+                    <name> [ --tiny-int <byte(default)|boolean> ] [ --delimiter <delimiter> ]
+                    {-d | --database} <name> [ {-p | --port} <#> ] [ --quote <quote> ] [ {--exclusion-mode | --exc} <exclude|include|none(default)> ]
+            help:
+
+        Where command-specific arguments <cmd-args> are:
+            export: [ <table1 table2 ...>... ]
+            generate-metadata-mapping: [ <table1 table2 ...>... ]
+            help: [ <command>... ]
+
+        Where * indicates the default command(s)
+        See 'neo4j-etl help mysql <command>' for more information on a specific command.

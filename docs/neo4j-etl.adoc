@@ -1,0 +1,112 @@
+[[neo4j-etl-cli]]
+== neo4j-etl Command Line Tool
+
+This is the command line tool you use to retrieve and map the metadata from your relational database.
+And also to drive the export from the relational and import into Neo4j database.
+
+You can get the http://github.com/neo4j-contrib/neo4j-etl-components/releases[latest version of the import tool from GitHub].
+
+Just download and uncompress the zip and you're ready to go.
+// If you want to use other databases than mysql, please drop the database driver into the `lib` directory.
+
+NOTE: For very large databases make sure to have enough disk-space for the CSV export and the Neo4j datastore and enough RAM and CPUs to finish the import quickly.
+
+.Simple Example Session
+----
+export NEO4J_HOME=/path/to/neo4j-enterprise-3.0.4
+
+mkdir -p /tmp/northwind
+
+./bin/neo4j-etl mysql generate-metadata-mapping --database northwind --user root > /tmp/northwind/mapping.json
+# Creating MySQL to CSV mappings...
+
+echo '{"multiline-fields":"true"}' > /tmp/northwind/options.json
+
+./bin/neo4j-etl mysql export --database northwind --user root \
+--destination $NEO4J_HOME/data/databases/graph.db/ --import-tool $NEO4J_HOME/bin  \
+--csv-directory /tmp/northwind --mapping-file /tmp/northwind/mapping.json --options-file /tmp/northwind/options.json \
+--force --quote '"'
+
+# - Reading options from file /tmp/northwind/options.json.
+# - Reading metadata mapping from file: /tmp/northwind/mapping.json
+# Exporting from MySQL to CSV...
+# CSV directory: /tmp/northwind/csv-006
+# - Writing CSV headers for node northwind.Territories
+# - Writing CSV data for node northwind.Territories
+# ...
+# - Writing CSV headers for relationship northwind.Employees.EmployeeID_northwind.Employees.ReportsTo
+# - Writing CSV data for relationship northwind.Employees.EmployeeID_northwind.Employees.ReportsTo
+# Creating Neo4j store from CSV...
+# /Users/mh/v/neo4j-enterprise-3.0.4/data/databases/graph.db
+
+
+$NEO4J_HOME/bin/neo4j-shell -path $NEO4J_HOME/data/databases/graph.db/ -c 'MATCH (n) RETURN labels(n), count(*);'
+
+# +--------------------------+
+# | labels(n)     | count(*) |
+# +--------------------------+
+# | ["Shipper"]   | 3        |
+# | ["Employee"]  | 9        |
+# | ["Region"]    | 4        |
+# | ["Customer"]  | 93       |
+# | ["Territory"] | 53       |
+# | ["Product"]   | 77       |
+# | ["Supplier"]  | 29       |
+# | ["Order"]     | 830      |
+# | ["Category"]  | 8        |
+# +--------------------------+
+# 9 rows
+----
+
+////
+./neo4j-etl mysql export  --host 127.0.0.1 --user neo --password neo \
+--database javabase --destination /tmp/neo4j-enterprise-3.0.1/data/databases/graph.db/ \
+--import-tool /tmp/neo4j-enterprise-3.0.1/bin  --csv-directory ./  \
+--options-file ./import-tool-options.json --force —debug
+////
+
+=== help command
+
+----
+include::neo4j-etl-help.txt[]
+----
+
+=== mysql command
+
+----
+include::neo4j-etl-mysql.txt[]
+----
+
+=== mysql generate-metadata-mapping command
+
+----
+include::neo4j-etl-mysql-generate-metadata-mapping.txt[]
+----
+
+=== mysql-export command
+
+----
+include::neo4j-etl-mysql-export.txt[]
+----
+
+////
+
+=== Example Session: Northwind
+
+This example session is based on the Northwind example dataset for MySQL.
+
+TODO ...
+
+=== Example Session: Employees
+
+This example session is based on the Employees example dataset for MySQL.
+
+TODO ...
+
+=== Example Session: MusicBrainz
+
+This example session is based on the MusicBrainz example dataset for Postgres.
+
+TODO ...
+
+////
