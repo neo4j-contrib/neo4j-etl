@@ -5,7 +5,7 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.5">
-<title>Neo4j ETL Components</title>
+<title>Neo4j ETL</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
@@ -420,11 +420,20 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </head>
 <body class="article">
 <div id="header">
-<h1>Neo4j ETL Components</h1>
+<h1>Neo4j ETL</h1>
 </div>
 <div id="content">
 <div class="sect1">
 <h2 id="_overview">Overview</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><span class="image"><img src="https://img.shields.io/github/release/neo4j-contrib/neo4j-etl.svg" alt="Github release status"></span>
+<span class="image"><img src="https://img.shields.io/github/contributors/neo4j-contrib/neo4j-etl.svg" alt="contributor stats"></span></p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_neo4j_etl">Neo4j ETL</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Data import from relational databases to Neo4j.</p>
@@ -432,8 +441,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="sect2">
 <h3 id="_download_install">Download &amp; Install</h3>
 <div class="paragraph">
-<p>Download &amp; unzip the latest <a href="https://github.com/neo4j-contrib/neo4j-etl-components/releases/latest">neo4j-etl-components.zip</a>.
-Once unzipped, download the proper JDBC Driver <a href="#jdbc-drivers">here</a> and add it to the <code>lib</code> folder.</p>
+<p>Download &amp; unzip the latest <a href="https://github.com/neo4j-contrib/neo4j-etl/releases/latest">neo4j-etl.zip</a>.
+Once unzipped, download the proper JDBC Driver (<a href="#jdbc-drivers">here</a>) and add it to the <code>lib</code> folder.</p>
 </div>
 </div>
 <div class="sect2">
@@ -441,29 +450,50 @@ Once unzipped, download the proper JDBC Driver <a href="#jdbc-drivers">here</a> 
 <div class="listingblock">
 <div class="title">Minimal command line</div>
 <div class="content">
-<pre>./bin/neo4j-etl { mysql | postgresql | oracle } export --url &lt;url&gt; --user &lt;user&gt; --password &lt;pwd&gt; \
- --destination $NEO4J_HOME/data/databases/graph.db/ --import-tool $NEO4J_HOME/bin  \
+<pre>./bin/neo4j-etl export \
+ --rdbms:url &lt;url&gt; --rdbms:user &lt;user&gt; --rdbms:password &lt;password&gt; \
+ --destination $NEO4J_HOME/data/databases/graph.db/ --import-tool $NEO4J_HOME/bin \
  --csv-directory /tmp/northwind</pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="title">Full set of command line options</div>
 <div class="content">
-<pre>./bin/neo4j-etl { mysql | postgresql | oracle } export --url &lt;url&gt; --user &lt;user&gt; --password &lt;pwd&gt; \
---database &lt;database&gt; --destination $NEO4J_HOME/data/databases/graph.db/ \
---import-tool $NEO4J_HOME/bin --csv-directory /tmp  \
---options-file ./import-tool-options.json
---force --debug</pre>
+<pre>./bin/neo4j-etl export \
+ --rdbms:url &lt;url&gt; --rdbms:user &lt;user&gt; --rdbms:password &lt;password&gt; --rdbms:schema &lt;schema&gt; \
+ --using { bulk:neo4j-import | cypher:neo4j-shell | cypher:shell | cypher:direct } \
+ --neo4j:url &lt;neo4j url&gt; --neo4j:user &lt;neo4j user&gt; --neo4j:password &lt;neo4j password&gt; \
+ --destination $NEO4J_HOME/data/databases/graph.db/ --import-tool $NEO4J_HOME/bin \
+ --csv-directory /tmp/northwind --options-file ./import-tool-options.json --force --debug</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>For detailed usage see also the: <a href="http://neo4j-contrib.github.io/neo4j-etl-components#neo4j-etl-cli">tool documentation</a>.</p>
+<p>For detailed usage see also the: <a href="http://neo4j-contrib.github.io/neo4j-etl#neo4j-etl-cli">tool documentation</a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_quick_build_instructions">Quick Build Instructions</h3>
+<div class="paragraph">
+<p>To run the command line tool, once you cloned the project, build the project locally.</p>
+</div>
+<div class="paragraph">
+<p>From the root directory, run:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>git clone https://github.com/neo4j-contrib/neo4j-etl
+cd neo4j-etl
+mvn clean package -DskipTests</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Once that has been successfully executed, the scripts are located in the <code>neo-etl-cli/bin</code> directory.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_license">License</h3>
 <div class="paragraph">
-<p>This tool is licensed under the <a href="http://github.com/neo4j-contrib/neo4j-etl-components/blob/master/LICENSE.txt">NEO4J PRE-RELEASE LICENSE AGREEMENT</a>.</p>
+<p>This tool is licensed under the <a href="http://github.com/neo4j-contrib/neo4j-etl/blob/master/LICENSE.txt">NEO4J PRE-RELEASE LICENSE AGREEMENT</a>.</p>
 </div>
 </div>
 <div class="sect2">
@@ -478,6 +508,187 @@ Once unzipped, download the proper JDBC Driver <a href="#jdbc-drivers">here</a> 
 </li>
 </ul>
 </div>
+<div class="paragraph">
+<p>We&#8217;re welcoming all contributions.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Please first raise an issue so that we can discuss your ideas and avoid duplicate work</p>
+</li>
+<li>
+<p>Send your changes as a pull request</p>
+</li>
+<li>
+<p>Make sure to provide tests with your changes</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_prerequisites">Prerequisites</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://maven.apache.org/">Maven</a></p>
+</li>
+<li>
+<p>JDBC Driver:</p>
+</li>
+</ul>
+</div>
+<table id="jdbc-drivers" class="tableblock frame-all grid-all spread">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Vendor</th>
+<th class="tableblock halign-left valign-top">JDBC Driver URL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://www.mysql.com/">MySql</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="http://dev.mysql.com/downloads/connector/j/" class="bare">http://dev.mysql.com/downloads/connector/j/</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="http://www.postgresql.com/">PostgreSql</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://jdbc.postgresql.org/download.html" class="bare">https://jdbc.postgresql.org/download.html</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://www.oracle.com/">Oracle</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="http://www.oracle.com/technetwork/database/features/jdbc/default-2280470.html" class="bare">http://www.oracle.com/technetwork/database/features/jdbc/default-2280470.html</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://www.microsoft.com/en-us/sql-server/">Microsoft SQL Server</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://www.microsoft.com/en-us/download/details.aspx?id=55539" class="bare">https://www.microsoft.com/en-us/download/details.aspx?id=55539</a></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_tests">Tests</h3>
+<div class="paragraph">
+<p>Northwind database scripts are downloaded from <a href="https://code.google.com/archive/p/northwindextended/downloads" class="bare">https://code.google.com/archive/p/northwindextended/downloads</a></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_integration_tests">Integration Tests</h3>
+<div class="paragraph">
+<p>You can run the tests with</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>a local instance,</p>
+</li>
+<li>
+<p>a <a href="https://www.docker.com/">Docker</a> instance,</p>
+</li>
+<li>
+<p><a href="https://www.vagrantup.com/">Vagrant</a></p>
+</li>
+<li>
+<p>or in AWS.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>You will need a RDBMS user <code>neo4j</code> with password <code>neo4j</code> with admin privileges to run the tests.</p>
+</div>
+<div class="paragraph">
+<p>To run the tests in AWS, you&#8217;ll need an AWS IAM user.</p>
+</div>
+<div class="paragraph">
+<p>To run the tests using a local instance:</p>
+</div>
+<div class="paragraph">
+<div class="title">Grant all privileges to the user <code>neo4j</code> identified by password <code>neo4j</code></div>
+<p>MySQL:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>CREATE USER 'neo4j'@'localhost' IDENTIFIED BY 'neo4j';
+GRANT ALL PRIVILEGES ON *.* TO 'neo4j'@'localhost' WITH GRANT OPTION;
+FLUSH PRIVILEGES;</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>PostgreSQL:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>CREATE USER neo4j WITH SUPERUSER ENCRYPTED PASSWORD 'neo4j';</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Oracle:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>CREATE USER neo4j IDENTIFIED BY neo4j;
+GRANT DBA TO neo4j;</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>For Oracle, you&#8217;ll need to add the Oracle Driver to your local Maven repository manually:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>mvn install:install-file -Dfile={Path/to/your/ojdbc7.jar} \
+      -DgroupId=com.oracle -DartifactId=ojdbc7 -Dversion=12.1.0.2 -Dpackaging=jar</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Microsoft SQL:</p>
+</div>
+<div class="paragraph">
+<p>Currently the integration tests use the default user "sa".</p>
+</div>
+<div class="paragraph">
+<p>To run the tests locally:</p>
+</div>
+<div class="paragraph">
+<p><code>mvn -P integration-test clean test</code></p>
+</div>
+<div class="paragraph">
+<p>To run the tests using Vagrant:</p>
+</div>
+<div class="paragraph">
+<p><code>mvn -P integration-test -D PLATFORM=vagrant clean test</code></p>
+</div>
+<div class="paragraph">
+<p>To run the tests using AWS:</p>
+</div>
+<div class="paragraph">
+<p>Note: You need to create AWS Keypair and have the credentials file created to do this</p>
+</div>
+<div class="paragraph">
+<p><code>mvn -P integration-test -D PLATFORM=aws -D EC2_SSH_KEY=&lt;name of your EC2 SSH key&gt; clean test</code></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_performance_tests">Performance Tests</h3>
+<div class="paragraph">
+<p>Set of tests that are part of the <code>neo4j-etl-it</code> module.</p>
+</div>
+<div class="paragraph">
+<p>However, they are skipped usually when you run the integration-test target by default. You can run them separately as part of a test suite.</p>
+</div>
+<div class="paragraph">
+<p>To run performance tests locally:</p>
+</div>
+<div class="paragraph">
+<p><code>mvn -P performance-test clean dependency:copy-dependencies test -D failIfNoTests=false -D EC2_SSH_KEY=&lt;name of your EC2 SSH key&gt;</code></p>
+</div>
+<div class="paragraph">
+<p>To run performance tests in AWS:</p>
+</div>
+<div class="paragraph">
+<p><code>mvn -P performance-test clean dependency:copy-dependencies test -D PLATFORM=aws -D failIfNoTests=false -D EC2_SSH_KEY=&lt;name of your EC2 SSH key&gt;</code></p>
+</div>
 </div>
 </div>
 </div>
@@ -485,7 +696,7 @@ Once unzipped, download the proper JDBC Driver <a href="#jdbc-drivers">here</a> 
 <h2 id="_introduction">Introduction</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The Neo4j ETL components, especially the <code>neo4j-etl</code> tool, can be used to import well modeled (i.e. normalized) relational data into Neo4j.
+<p>The Neo4j ETL, especially the <code>neo4j-etl</code> command-line tool, can be used to import well modeled (i.e. normalized) relational data into Neo4j.
 It applies some simple rules for transforming the relational model.</p>
 </div>
 <div class="paragraph">
@@ -497,7 +708,7 @@ It applies some simple rules for transforming the relational model.</p>
 <p>Read database metadata and generate mapping.json</p>
 </li>
 <li>
-<p>Optionally edit mapping.json</p>
+<p>Optionally edit mapping.json with the <code>neo4j-etl-ui</code></p>
 </li>
 <li>
 <p>Export relational data to CSV</p>
@@ -506,7 +717,23 @@ It applies some simple rules for transforming the relational model.</p>
 <p>Generate Mapping Headers</p>
 </li>
 <li>
-<p>Import into Neo4j using the bulk <code>neo4j-import</code> tool</p>
+<p>Import into Neo4j using</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>the <code>neo4j-import</code> tool for initial <strong>offline</strong> bulk load</p>
+</li>
+<li>
+<p>the <code>neo4j-shell</code> tool for incremental <strong>offline</strong> bulk load</p>
+</li>
+<li>
+<p>the <code>cypher-shell</code> tool for incremental <strong>online</strong> single-transaction load</p>
+</li>
+<li>
+<p>the <code>java bolt driver</code> for incremental <strong>online</strong> batch load</p>
+</li>
+</ol>
+</div>
 </li>
 </ol>
 </div>
@@ -546,22 +773,31 @@ It applies some simple rules for transforming the relational model.</p>
 <p>Read mapping file to export data from other databases then</p>
 </li>
 <li>
-<p>Import into Neo via Neo4j Import Tool</p>
+<p>Import into Neo via different tools (<code>neo4j-import</code>, <code>neo4j-shell</code>, <code>cypher-shell</code>, <code>java bolt driver</code>)</p>
 </li>
 <li>
-<p>Build indexes</p>
+<p>Work in offline and online mode</p>
+</li>
+<li>
+<p>Import in both an empty (initial load) and not-empty graph (incremental)</p>
+</li>
+<li>
+<p>Build indexes and constraints</p>
 </li>
 <li>
 <p>Non-trivial datatypes (dates, binary)</p>
 </li>
 <li>
-<p>Support on Linux</p>
+<p>Support on Unix-like and Microsoft Operating Systems</p>
 </li>
 <li>
-<p>Support MySQL, PostgreSQL, Oracle</p>
+<p>Support for most popular relational databases like MySQL, PostgreSQL, Oracle and Microsoft SQL</p>
 </li>
 <li>
 <p>Support user specified JDBC drivers</p>
+</li>
+<li>
+<p>UI tool to modify mappings</p>
 </li>
 </ul>
 </div>
@@ -571,14 +807,7 @@ It applies some simple rules for transforming the relational model.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>UI tool to modify mappings - currently manual editing</p>
-</li>
-<li>
-<p>Custom Mapping Rules<br>
-Transformations for names, data, links</p>
-</li>
-<li>
-<p>Online Synchronisation, Import into existing database - currently, only supporting initial import</p>
+<p>Custom Mapping Rules + Transformations for names, data, links</p>
 </li>
 <li>
 <p>Exemplary integration into a 3rd party ETL pipeline</p>
@@ -621,17 +850,20 @@ Transformations for names, data, links</p>
 <h2 id="neo4j-etl-cli">neo4j-etl Command Line Tool</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>This is the command line tool you use to retrieve and map the metadata from your relational database.
-And also to drive the export from the relational and import into Neo4j database.</p>
+<p>This is the command line tool you use to retrieve and map the metadata from your relational database and drive the export from the relational and import into Neo4j database.</p>
 </div>
 <div class="paragraph">
-<p>It supports <strong>MySQL</strong>, <strong>PostgreSQL</strong> and <strong>Oracle</strong> relational databases.</p>
+<p>Also, with the newly released user interface you can preview the resulting graph data model and eventually improve it by setting your favourite label and property names
+or relationships and property types.</p>
 </div>
 <div class="paragraph">
-<p>You can get the <a href="http://github.com/neo4j-contrib/neo4j-etl-components/releases/latest">latest version of the import tool from GitHub</a>.</p>
+<p>It supports all relational databases with a JDBC driver, for example <strong>MySQL</strong>, <strong>PostgreSQL</strong>, <strong>Oracle</strong> and <strong>Microsoft SQL</strong>.</p>
 </div>
 <div class="paragraph">
-<p>Once downloaded and uncompressed the zip, you also need download the proper JDBC Driver and add it to the <code>lib</code> folder.</p>
+<p>You can get the <a href="http://github.com/neo4j-contrib/neo4j-etl/releases/latest">latest version of the import tool from GitHub</a>.</p>
+</div>
+<div class="paragraph">
+<p>Once downloaded and uncompressed the operating system specific <code>zip</code> / <code>tar.gz</code>, you also need download the proper JDBC Driver and add it to the <code>lib</code> folder.</p>
 </div>
 <div class="paragraph">
 <p>You can follow the proper link in the below table in order to download the proper driver jar</p>
@@ -660,6 +892,10 @@ And also to drive the export from the relational and import into Neo4j database.
 <td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://www.oracle.com/">Oracle</a></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><a href="http://www.oracle.com/technetwork/database/features/jdbc/default-2280470.html" class="bare">http://www.oracle.com/technetwork/database/features/jdbc/default-2280470.html</a></p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://www.microsoft.com/en-us/sql-server/">Microsoft SQL Server</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><a href="https://www.microsoft.com/en-us/download/details.aspx?id=55539" class="bare">https://www.microsoft.com/en-us/download/details.aspx?id=55539</a></p></td>
+</tr>
 </tbody>
 </table>
 <div class="admonitionblock note">
@@ -674,99 +910,106 @@ For very large databases make sure to have enough disk-space for the CSV export 
 </tr>
 </table>
 </div>
-<div class="listingblock">
-<div class="title">Simple Example Session</div>
-<div class="content">
-<pre>export NEO4J_HOME=/path/to/neo4j-enterprise-3.1.3
-
-mkdir -p /tmp/northwind
-
-./bin/neo4j-etl { mysql | postgresql | oracle } generate-metadata-mapping --database northwind --user root &gt; /tmp/northwind/mapping.json
-# Creating RDBMS to CSV mappings...
-
-echo '{"multiline-fields":"true"}' &gt; /tmp/northwind/options.json
-
-./bin/neo4j-etl { mysql | postgresql | oracle } export --database northwind --user root \
---destination $NEO4J_HOME/data/databases/graph.db/ --import-tool $NEO4J_HOME/bin  \
---csv-directory /tmp/northwind --mapping-file /tmp/northwind/mapping.json --options-file /tmp/northwind/options.json \
---force --quote '"'
-
-# - Reading options from file /tmp/northwind/options.json.
-# - Reading metadata mapping from file: /tmp/northwind/mapping.json
-# Exporting from RDBMS to CSV...
-
-# CSV directory: /tmp/northwind/csv-006
-# - Writing CSV headers for node northwind.Territories
-# - Writing CSV data for node northwind.Territories
-# ...
-# - Writing CSV headers for relationship northwind.Employees.EmployeeID_northwind.Employees.ReportsTo
-# - Writing CSV data for relationship northwind.Employees.EmployeeID_northwind.Employees.ReportsTo
-# Creating Neo4j store from CSV...
-# /Users/mh/v/neo4j-enterprise-3.1.3/data/databases/graph.db
-
-
-$NEO4J_HOME/bin/neo4j-shell -path $NEO4J_HOME/data/databases/graph.db/ -c 'MATCH (n) RETURN labels(n), count(*);'
-
-# +--------------------------+
-# | labels(n)     | count(*) |
-# +--------------------------+
-# | ["Shipper"]   | 3        |
-# | ["Employee"]  | 9        |
-# | ["Region"]    | 4        |
-# | ["Customer"]  | 93       |
-# | ["Territory"] | 53       |
-# | ["Product"]   | 77       |
-# | ["Supplier"]  | 29       |
-# | ["Order"]     | 830      |
-# | ["Category"]  | 8        |
-# +--------------------------+
-# 9 rows</pre>
-</div>
-</div>
 <div class="sect2">
-<h3 id="_rdbms_command">RDBMS Command</h3>
+<h3 id="_available_commands">Available commands</h3>
 <div class="listingblock">
 <div class="content">
 <pre>NAME
-        neo4j-etl { mysql | postgresql | oracle }  - Export tools for MySQL, PostgreSQL and Oracle RDBMS.
+
+        neo4j-etl
+
+            - Export tools for MySQL, PostgreSQL, Oracle and Microsoft SQL RDBMS.
 
 SYNOPSIS
-        neo4j-etl { mysql | postgresql | oracle } { export | generate-metadata-mapping | help* } [--]
-                [cmd-options] &lt;cmd-args&gt;
+
+        neo4j-etl { ui | export | generate-metadata-mapping | help* }
+
+            [--] [cmd-options] &lt;cmd-args&gt;
 
         Where command-specific options [cmd-options] are:
-            export: [ --debug ] [ --url &lt;url&gt; ] [ {-h | --host} &lt;hostname&gt; ] [ {-p | --port} &lt;port #&gt; ]
-                    {-d | --database} &lt;name&gt; [ {-s | --schema} &lt;schema&gt; ]
-                    {-u | --user} &lt;username&gt; [ --password &lt;password&gt; ]
-                    [ --options-file &lt;file&gt; ] --destination &lt;directory&gt;  [ --delimiter &lt;character&gt; ]
-                    [ --mapping-file &lt;file|stdin&gt; ] [ --quote &lt;character&gt; ]
-                    [ {--exclusion-mode | --exc} &lt;exclude|include|none(default)&gt; ]
-                    --import-tool &lt;directory&gt; [ {--relationship-name | --rel-name} &lt;table(default)|column&gt; ]
-                    [ {--tiny-int | --tiny} &lt;byte(default)|boolean&gt; ] --csv-directory &lt;directory&gt; [ --force ]
-            generate-metadata-mapping: [ --debug ] [ {-url} &lt;url&gt; ] [ {-h | --host} &lt;name&gt; ] [ {-p | --port} &lt;port #&gt; ]
-                    {-d | --database} &lt;name&gt; {-s | --schema} &lt;schema&gt;
-                    {-u | --user} &lt;name&gt; [ --password &lt;name&gt; ]
-                    [ --options-file &lt;file&gt; ] [ {--relationship-name | --rel-name} &lt;table(default)|column&gt; ]
-                    [ --tiny-int &lt;byte(default)|boolean&gt; ] [ --delimiter &lt;delimiter&gt; ]
-                    [ --quote &lt;quote&gt; ] [ {--exclusion-mode | --exc} &lt;exclude|include|none(default)&gt; ]
+
+            ui:
+
+                --port &lt;port&gt;
+
+            export:
+
+                --rdbms:url &lt;rdbms url&gt;
+                --rdbms:user &lt;rdbms user&gt;
+                --rdbms:password &lt;rdbms password&gt;
+                [ --rdbms:schema &lt;rdbms schema&gt; ]
+
+                [ --using &lt;bulk:neo4j-import* | cypher:neo4j-shell | cypher:shell | cypher:direct&gt; ]
+
+                [ --neo4j:url &lt;neo4j url&gt; ]
+                [ --neo4j:user &lt;neo4j user&gt; ]
+                [ --neo4j:password &lt;neo4j password&gt; ]
+
+                --import-tool &lt;directory&gt;
+                --csv-directory &lt;directory&gt;
+                --destination &lt;directory&gt;
+
+                [ --mapping-file &lt;file | stdin&gt; ]
+
+                [ { --exclusion-mode | --exc } &lt;none* | exclude | include&gt; ]
+                [ { --relationship-name | --rel-name } &lt;table* | column&gt; ]
+                [ { --tiny-int | --tiny } &lt;byte* | boolean&gt; ]
+                [ --delimiter &lt;character&gt; ]
+                [ --options-file &lt;file&gt; ]
+                [ --quote &lt;character&gt; ]
+                [ --force ]
+                [ --debug ]
+
+            generate-metadata-mapping:
+
+                --rdbms:url &lt;rdbms url&gt;
+                --rdbms:user &lt;rdbms user&gt;
+                --rdbms:password &lt;rdbms password&gt;
+                [ { --rdbms:schema } &lt;schema&gt; ]
+
+                [ { --exclusion-mode | --exc } &lt;none* | exclude | include&gt; ]
+                [ { --relationship-name | --rel-name } &lt;table* | column&gt; ]
+                [ { --tiny-int | --tiny } &lt;byte* | boolean&gt; ]
+                [ --delimiter &lt;character&gt; ]
+                [ --options-file &lt;file&gt; ]
+                [ --quote &lt;quote&gt; ]
+                [ --debug ]
+
             help:
 
         Where command-specific arguments &lt;cmd-args&gt; are:
+
+            ui: { start* | stop }
             export: [ &lt;table1 table2 ...&gt;... ]
             generate-metadata-mapping: [ &lt;table1 table2 ...&gt;... ]
             help: [ &lt;command&gt;... ]
 
         Where * indicates the default command(s)
-        See 'neo4j-etl help { mysql | postgresql | oracle } &lt;command&gt;' for more information on a specific command.</pre>
+        See 'neo4j-etl help &lt;command&gt;' for more information on a specific command.
+
+        Note:
+
+            Previous releases' parameters are still maintained for retro-compatibility,
+            but they've been marked as deprecated and may be removed in future versions.
+
+            export:
+            generate-metadata-mapping:
+
+                    the triple { -h | --host } &lt;host&gt; { -p | --port } &lt;port&gt; { -d | --database } &lt;database&gt;
+                    has been deprecated in favour of --rdbms:url &lt;rdbms url&gt;
+
+                    { -s | --schema } &lt;schema&gt; has been deprecated in favour of --rdbms:schema &lt;schema&gt;</pre>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="__help_command">'help' Command</h3>
+<h3 id="__help_command">'help' command</h3>
 <div class="listingblock">
 <div class="content">
 <pre>NAME
-        neo4j-etl help - Display help information
+        neo4j-etl help
+
+            - Display help information
 
 SYNOPSIS
         neo4j-etl help [--] [ &lt;command&gt;... ]
@@ -782,46 +1025,46 @@ OPTIONS
 </div>
 </div>
 <div class="sect2">
-<h3 id="__generate_metadata_mapping_command">'generate-metadata-mapping' Command</h3>
+<h3 id="__generate_metadata_mapping_command">'generate-metadata-mapping' command</h3>
 <div class="listingblock">
 <div class="content">
 <pre>NAME
-        neo4j-etl { mysql | postgresql | oracle } generate-metadata-mapping - Create MySQL to Neo4j
-        metadata mapping Json.
+
+        neo4j-etl generate-metadata-mapping
+
+            - Create RDBMS to Neo4j metadata mapping Json.
 
 SYNOPSIS
-        neo4j-etl { mysql | postgresql | oracle } generate-metadata-mapping
-                [ --url &lt;url&gt; ] [ {-h | --host} &lt;hostname&gt; ] [ {-p | --port} &lt;port #&gt; ]
-                [ {-d | --database} &lt;name&gt; {-s | --schema} &lt;schema&gt;
-                {-u | --user} &lt;username&gt; [ --password &lt;password&gt; ]
-                [ --debug ] [ --delimiter &lt;delimiter&gt; ]
-                [ {--exclusion-mode | --exc} &lt;exclude|include|none(default)&gt; ]
-                [ --options-file &lt;file&gt; ] [ --quote &lt;quote&gt; ]
-                [ {--relationship-name | --rel-name} &lt;table(default)|column&gt; ]
-                [ --tiny-int &lt;byte(default)|boolean&gt; ] [--] [ &lt;table1 table2 ...&gt;... ]
+        neo4j-etl generate-metadata-mapping
+
+            --rdbms:url &lt;rdbms url&gt;
+            --rdbms:user &lt;rdbms user&gt;
+            --rdbms:password &lt;rdbms password&gt;
+            [ --rdbms:schema &lt;rdbms schema&gt; ]
+
+            [ { --exclusion-mode | --exc } &lt;none* | exclude | include&gt; ]
+            [ { --relationship-name | --rel-name } &lt;table* | column&gt; ]
+            [ { --tiny-int | --tiny } &lt;byte* | boolean&gt; ]
+            [ --delimiter &lt;character&gt; ]
+            [ --options-file &lt;file&gt; ]
+            [ --quote &lt;quote&gt; ]
+            [ --debug ]
+
+            [--] [ &lt;table1 table2 ...&gt;... ]
 
 OPTIONS
-        --url &lt;url&gt;
-            Database connection URL.
-            This parameter is alternative to `--host`, `--port` and `--database`.
 
-        -h &lt;name&gt;, --host &lt;name&gt;
-            Host to use for connection to RDBMS.
+        --rdbms:url &lt;name&gt;
+            RDBMS connection URL.
 
-        -p &lt;#&gt;, --port &lt;#&gt;
-            Port number to use for connection to RDBMS.
+        --rdbms:user &lt;username&gt;
+            RDBMS login user.
 
-        -d &lt;name&gt;, --database &lt;name&gt;
-            Database name.
+        --rdbms:password &lt;password&gt;
+            RDBMS login password.
 
-        -u &lt;name&gt;, --user &lt;name&gt;
-            User for login to RDBMS.
-
-        --password &lt;name&gt;
-            Password for login to RDBMS.
-
-        -s &lt;schema&gt;, --schema &lt;schema&gt;
-            Schema to be exported.
+        --rdbms:schema &lt;schema&gt;
+            RDBMS schema to be exported.
 
         --debug
             Print detailed diagnostic output.
@@ -829,8 +1072,7 @@ OPTIONS
         --delimiter &lt;delimiter&gt;
             Delimiter to separate fields in CSV.
 
-        --exclusion-mode &lt;exclude|include|none(default)&gt;, --exc
-        &lt;exclude|include|none(default)&gt;
+        --exclusion-mode &lt;exclude|include|none(default)&gt;, --exc &lt;exclude|include|none(default)&gt;
             Specifies how to handle table exclusion. Options are mutually
             exclusive.exclude: Excludes specified tables from the process. All
             other tables will be included.include: Includes specified tables
@@ -857,53 +1099,134 @@ OPTIONS
             command-line options)
 
         &lt;table1 table2 ...&gt;
-            Tables to be excluded/included</pre>
+            Tables to be excluded/included
+
+DEPRECATED OPTIONS
+
+        -h &lt;hostname&gt;, --host &lt;hostname&gt;
+            RDBMS connection host.
+
+        -p &lt;port #&gt;, --port &lt;port #&gt;
+            RDBMS connection port.
+
+        -d &lt;name&gt;, --database &lt;name&gt;
+            RDBMS database name.
+
+        --u &lt;username&gt;, --user &lt;username&gt;
+            RDBMS login user.
+
+        --password &lt;password&gt;
+            RDBMS login password.
+
+        -s &lt;schema&gt;, --schema &lt;schema&gt;
+            RDBMS schema to be exported.</pre>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="__export_command">'export' Command</h3>
+<h3 id="__ui_command">'ui' command</h3>
 <div class="listingblock">
 <div class="content">
 <pre>NAME
-        neo4j-etl { mysql | postgresql | oracle } export - Export from MySQL, PostgreSQL, Oracle RDBMS.
+
+        neo4j-etl generate-metadata-mapping
+
+            - Web application for editing RDBMS to Neo4j metadata mapping Json.
 
 SYNOPSIS
-        neo4j-etl { mysql | postgresql | oracle } export
-                [ --url &lt;url&gt; ] [ {-h | --host} &lt;hostname&gt; ] [ {-p | --port} &lt;port #&gt; ]
-                [ {-d | --database} &lt;name&gt; {-s | --schema} &lt;schema&gt;
-                {-u | --user} &lt;username&gt; [ --password &lt;password&gt; ]
-                [ --debug ] [ --delimiter &lt;character&gt; ] --destination &lt;directory&gt;
-                [ {--exclusion-mode | --exc} &lt;exclude|include|none(default)&gt; ]
-                [ --force ] --import-tool &lt;directory&gt;
-                [ --mapping-file &lt;file|stdin&gt; ] [ --options-file &lt;file&gt; ]
-                [ --quote &lt;character&gt; ] --csv-directory &lt;directory&gt;
-                [ {--relationship-name | --rel-name} &lt;table(default)|column&gt; ]
-                [ {--tiny-int | --tiny} &lt;byte(default)|boolean&gt; ]
-                [--] [ &lt;table1 table2 ...&gt;... ]
+        neo4j-etl ui { start* | stop }
+
+            --port &lt;port&gt;
 
 OPTIONS
-        --url &lt;name&gt;
-            Database connection URL.
-            This parameter is alternative to `--host`, `--port` and `--database`.
 
-        -h &lt;hostname&gt;, --host &lt;hostname&gt;
-            Host to use for connection to RDBMS.
+        start:
+            Run the `neo4j-etl-ui` web server locally to make the UI available.
 
-        -p &lt;port #&gt;, --port &lt;port #&gt;
-            Port number to use for connection to RDBMS.
+        stop:
+            Shutdown the `neo4j-etl-ui` web server.
 
-        -d &lt;name&gt;, --database &lt;name&gt;
-            Database name.
+        --port &lt;port&gt;
+            UI connection port.
 
-        -u &lt;username&gt;, --user &lt;username&gt;
-            User for login to RDBMS.
+        Note:
 
-        --password &lt;password&gt;
-            Password for login to RDBMS.
+            Passing no argument is equivalent to passing "start" (the default).</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="__export_command">'export' command</h3>
+<div class="listingblock">
+<div class="content">
+<pre>NAME
 
-        -s &lt;schema&gt;, --schema &lt;schema&gt;
-            Schema to be exported.
+        neo4j-etl export
+
+            - Export from MySQL, PostgreSQL, Oracle and Microsoft SQL RDBMS.
+
+SYNOPSIS
+
+        neo4j-etl export
+
+            --rdbms:url &lt;rdbms url&gt;
+            --rdbms:user &lt;rdbms user&gt;
+            --rdbms:password &lt;rdbms password&gt;
+            [ --rdbms:schema &lt;rdbms schema&gt; ]
+
+            [ --using &lt;bulk:neo4j-import* | cypher:neo4j-shell | cypher:shell | cypher:direct&gt; ]
+
+            [ --neo4j:url &lt;neo4j url&gt; ]
+            [ --neo4j:user &lt;neo4j user&gt; ]
+            [ --neo4j:password &lt;neo4j password&gt; ]
+
+            --import-tool &lt;directory&gt;
+            --csv-directory &lt;directory&gt;
+            --destination &lt;directory&gt;
+
+            [ --mapping-file &lt;file | stdin&gt; ]
+
+            [ { --exclusion-mode | --exc } &lt;none* | exclude | include&gt; ]
+            [ { --relationship-name | --rel-name } &lt;table* | column&gt; ]
+            [ { --tiny-int | --tiny } &lt;byte* | boolean&gt; ]
+            [ --delimiter &lt;character&gt; ]
+            [ --options-file &lt;file&gt; ]
+            [ --quote &lt;character&gt; ]
+            [ --force ]
+            [ --debug ]
+
+OPTIONS
+
+        --rdbms:url &lt;name&gt;
+            RDBMS connection URL.
+
+        --rdbms:user &lt;username&gt;
+            RDBMS login user.
+
+        --rdbms:password &lt;password&gt;
+            RDBMS login password.
+
+        --rdbms:schema &lt;schema&gt;
+            RDBMS schema to be exported.
+
+        --using
+            Import strategy
+            1) 'bulk:neo4j-import' (default): use "neo4j-import" tool for initial *offline* bulk load;
+            2) 'cypher:neo4j-shell': use "neo4j-shell" tool for incremental *offline* bulk load;
+            3) 'cypher:shell': use "cypher-shell" tool for incremental *online* single-transaction load;
+            4) 'cypher:direct': use the "java bolt driver" for incremental *online* batch load.
+
+            --neo4j:url &lt;name&gt;, --neo4j:user &lt;username&gt;, --neo4j:password &lt;password&gt; are mandatory parameters
+            in case of strategies 3) and 4) and the NEO4J database must be online.
+
+        --neo4j:url &lt;name&gt;
+            NEO4J connection URL.
+
+        --neo4j:user &lt;username&gt;
+            NEO4J login user.
+
+        --neo4j:password &lt;password&gt;
+            NEO4J login password.
 
         --debug
             Print detailed diagnostic output.
@@ -917,8 +1240,7 @@ OPTIONS
         --destination &lt;directory&gt;
             Path to destination store directory.
 
-        --exclusion-mode &lt;exclude|include|none(default)&gt;, --exc
-        &lt;exclude|include|none(default)&gt;
+        --exclusion-mode &lt;exclude|include|none(default)&gt;, --exc &lt;exclude|include|none(default)&gt;
             Specifies how to handle table exclusion. Options are mutually
             exclusive.exclude: Excludes specified tables from the process. All
             other tables will be included.include: Includes specified tables
@@ -955,12 +1277,173 @@ OPTIONS
             command-line options)
 
         &lt;table1 table2 ...&gt;
-            Tables to be excluded/included</pre>
+            Tables to be excluded/included
+
+DEPRECATED OPTIONS
+
+        -h &lt;hostname&gt;, --host &lt;hostname&gt;
+            RDBMS connection host.
+
+        -p &lt;port #&gt;, --port &lt;port #&gt;
+            RDBMS connection port.
+
+        -d &lt;name&gt;, --database &lt;name&gt;
+            RDBMS database name.
+
+        --u &lt;username&gt;, --user &lt;username&gt;
+            RDBMS login user.
+
+        --password &lt;password&gt;
+            RDBMS login password.
+
+        -s &lt;schema&gt;, --schema &lt;schema&gt;
+            RDBMS schema to be exported.</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_example_session_basic">Example Session: Basic</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_generate_metadata_mapping">Generate Metadata Mapping</h3>
+<div class="listingblock">
+<div class="content">
+<pre>~: export NEO4J_HOME=/path/to/neo4j-enterprise-3.2.3
+
+~: mkdir -p /tmp/northwind
+
+~: $NEO4J_HOME/bin/neo4j-etl generate-metadata-mapping \
+  --rdbms:url jdbc:oracle:thin:@localhost:49161:XE \
+  --rdbms:user northwind --rdbms:password northwind \
+  --rdbms:schema northwind &gt; /tmp/northwind/mapping.json</pre>
 </div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_example_session_docker_northwind">Example Session: Docker + Northwind</h3>
+<h3 id="_edit_metadata_mapping_via_user_interface">Edit Metadata Mapping via User Interface</h3>
+<div class="listingblock">
+<div class="content">
+<pre>STEP 1: Generate Metadata Mapping File (via command line)
+
+Just follow the above instructions.
+
+STEP 2: Inspect and adjust the graph data model (via user interface)
+
+~: $NEO4J_HOME/bin/neo4j-etl ui start
+
+~: open http://localhost:3000
+
+Once satisfied, save the consolidated mapping file (i.e. /tmp/northwind/edited-mapping.json) and stop the ui
+
+~: $NEO4J_HOME/bin/neo4j-etl ui stop
+
+STEP 3: Import your data into Neo4j using the just exported Metadata Mapping (again via command line)
+
+You can use any of the below alternatives, but don't forget to add the following command option:
+
+  --mapping-file /tmp/northwind/edited-mapping.json</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_offline_bulk_import_via_code_neo4j_import_code_tool_for_initial_load_neo4j_must_be_empty">Offline Bulk Import via <code>neo4j-import</code> tool for initial load (neo4j must be empty)</h3>
+<div class="listingblock">
+<div class="content">
+<pre>~: echo '{ "multiline-fields" : "true" }' &gt; /tmp/northwind/options.json
+
+~: $NEO4J_HOME/bin/neo4j-etl export  \
+  --rdbms:url jdbc:oracle:thin:@localhost:49161:XE \
+  --rdbms:user northwind --rdbms :password northwind \
+  --rdbms:schema northwind \
+  --using bulk:neo4j-import \
+  --import-tool $NEO4J_HOME/bin  \
+  --csv-directory /tmp/northwind \
+  --options-file /tmp/northwind/options.json \
+  --quote '"' --force</pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Test Offline Bulk Import result</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>~: $NEO4J_HOME/bin/neo4j-shell -path $NEO4J_HOME/data/databases/graph.db/ -c 'MATCH (n) RETURN labels(n), count(*);'
+
+# +--------------------------+
+# | labels(n)     | count(*) |
+# +--------------------------+
+# | ["Shipper"]   | 3        |
+# | ["Employee"]  | 9        |
+# | ["Region"]    | 4        |
+# | ["Customer"]  | 93       |
+# | ["Territory"] | 53       |
+# | ["Product"]   | 77       |
+# | ["Supplier"]  | 29       |
+# | ["Order"]     | 830      |
+# | ["Category"]  | 8        |
+# +--------------------------+
+# 9 rows</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_online_batch_import_via_code_java_bolt_driver_code_for_incremental_load_neo4j_can_be_already_populated">Online Batch Import via <code>java-bolt-driver</code> for incremental load (neo4j can be already populated)</h3>
+<div class="listingblock">
+<div class="content">
+<pre>~: echo '{ "multiline-fields" : "true" }' &gt; /tmp/northwind/options.json
+
+~: $NEO4J_HOME/bin/neo4j-etl export  \
+  --rdbms:url jdbc:oracle:thin:@localhost:49161:XE \
+  --rdbms:user northwind --rdbms:password northwind \
+  --rdbms:schema northwind \
+  --using cypher:direct \
+  --neo4j:url bolt://localhost:7687 \
+  --neo4j:user neo4j --neo4j:password neo4j \
+  --import-tool $NEO4J_HOME/bin  \
+  --csv-directory /tmp/northwind \
+  --options-file /tmp/northwind/options.json \
+  --quote '"' --force</pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Test Online Batch Incremental Import result</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>~: $NEO4J_HOME/bin/cypher-shell -a bolt://localhost:7687 -u neo4j -p neo4j 'MATCH (n) RETURN labels(n), count(*);'
+
+# +--------------------------+
+# | labels(n)     | count(*) |
+# +--------------------------+
+# | ["Shipper"]   | 3        |
+# | ["Employee"]  | 9        |
+# | ["Region"]    | 4        |
+# | ["Customer"]  | 93       |
+# | ["Territory"] | 53       |
+# | ["Product"]   | 77       |
+# | ["Supplier"]  | 29       |
+# | ["Order"]     | 830      |
+# | ["Category"]  | 8        |
+# +--------------------------+
+# 9 rows</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_example_session_docker_northwind">Example Session: Docker + Northwind</h2>
+<div class="sectionbody">
 <div class="paragraph">
 <p>This example session is based on the Northwind example dataset.</p>
 </div>
@@ -970,13 +1453,16 @@ OPTIONS
 <div class="ulist">
 <ul>
 <li>
-<p><a href="https://raw.githubusercontent.com/neo4j-contrib/neo4j-etl-components/master/neo4j-etl-it/src/main/resources/scripts/mysql/northwind.sql">MySQL</a></p>
+<p><a href="https://raw.githubusercontent.com/neo4j-contrib/neo4j-etl/master/neo4j-etl-it/src/main/resources/scripts/mysql/northwind.sql">MySQL</a></p>
 </li>
 <li>
-<p><a href="https://raw.githubusercontent.com/neo4j-contrib/neo4j-etl-components/master/neo4j-etl-it/src/main/resources/scripts/postgresql/northwind.sql">PostgreSQL</a></p>
+<p><a href="https://raw.githubusercontent.com/neo4j-contrib/neo4j-etl/master/neo4j-etl-it/src/main/resources/scripts/postgresql/northwind.sql">PostgreSQL</a></p>
 </li>
 <li>
-<p><a href="https://raw.githubusercontent.com/neo4j-contrib/neo4j-etl-components/master/neo4j-etl-it/src/main/resources/scripts/oracle/northwind.sql">Oracle</a></p>
+<p><a href="https://raw.githubusercontent.com/neo4j-contrib/neo4j-etl/master/neo4j-etl-it/src/main/resources/scripts/oracle/northwind.sql">Oracle</a></p>
+</li>
+<li>
+<p><a href="https://raw.githubusercontent.com/neo4j-contrib/neo4j-etl/master/neo4j-etl-it/src/main/resources/scripts/mssql/northwind.sql">Microsoft SQL</a></p>
 </li>
 </ul>
 </div>
@@ -1014,18 +1500,22 @@ root@bf99fbc0d31c:/# exit
 exit
 
 Load the database via the following sql script:
-https://raw.githubusercontent.com/neo4j-contrib/neo4j-etl-components/master/neo4j-etl-it/src/main/resources/scripts/mysql/northwind.sql
+https://raw.githubusercontent.com/neo4j-contrib/neo4j-etl/master/neo4j-etl-it/src/main/resources/scripts/mysql/northwind.sql
 
-~: export NEO4J_HOME=/path/to/neo4j-enterprise-3.1.3
+~: export NEO4J_HOME=/path/to/neo4j-enterprise-3.2.3
 
 ~: mkdir -p /tmp/northwind
 
-~: echo '{"multiline-fields":"true"}' &gt; /tmp/northwind/options.json
+~: echo '{ "multiline-fields" : "true" }' &gt; /tmp/northwind/options.json
 
-~: ./bin/neo4j-etl mysql export --url jdbc:mysql://localhost:5433/northwind?autoReconnect=true&amp;useSSL=false \
-      --user neo4j --password neo4j --import-tool $NEO4J_HOME/bin \
-      --options-file /tmp/northwind/options.json --csv-directory /tmp/northwind \
-      --destination $NEO4J_HOME/data/databases/graph.db/ --quote '"' --force</pre>
+~: ./bin/neo4j-etl export \
+  --rdbms:url jdbc:mysql://localhost:5433/northwind?autoReconnect=true&amp;useSSL=false \
+  --rdbms:user neo4j --rdbms:password neo4j \
+  --import-tool $NEO4J_HOME/bin \
+  --options-file /tmp/northwind/options.json \
+  --csv-directory /tmp/northwind \
+  --destination $NEO4J_HOME/data/databases/graph.db/ \
+  --quote '"' --force</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1045,21 +1535,29 @@ Type "help" for help.
 
 neo4j=# DROP DATABASE IF EXISTS northwind;
 neo4j=# CREATE DATABASE northwind WITH OWNER 'neo4j' ENCODING 'UTF8' LC_COLLATE = 'en_US.utf8' LC_CTYPE = 'en_US.utf8';
-neo4j=# \q
-
-Load the database via the following sql script:
-https://raw.githubusercontent.com/neo4j-contrib/neo4j-etl-components/master/neo4j-etl-it/src/main/resources/scripts/postgresql/northwind.sql
-
-~: export NEO4J_HOME=/path/to/neo4j-enterprise-3.1.3
+neo4j=# \q</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Load the database via the following sql script:
+<a href="https://raw.githubusercontent.com/neo4j-contrib/neo4j-etl/master/neo4j-etl-it/src/main/resources/scripts/postgresql/northwind.sql">northwind.sql</a></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>~: export NEO4J_HOME=/path/to/neo4j-enterprise-3.2.3
 
 ~: mkdir -p /tmp/northwind
 
 ~: echo '{"multiline-fields":"true"}' &gt; /tmp/northwind/options.json
 
-~: ./bin/neo4j-etl postgresql export --url jdbc:postgresql://localhost:5433/northwind?ssl=false \
-      --user neo4j --password neo4j --import-tool $NEO4J_HOME/bin \
-      --options-file /tmp/northwind/options.json --csv-directory /tmp/northwind \
-      --destination $NEO4J_HOME/data/databases/graph.db/ --quote '"' --force</pre>
+~: ./bin/neo4j-etl export \
+  --rdbms:url jdbc:postgresql://localhost:5433/northwind?ssl=false \
+  --rdbms:user neo4j --rdbms:password neo4j \
+  --import-tool $NEO4J_HOME/bin \
+  --options-file /tmp/northwind/options.json \
+  --csv-directory /tmp/northwind \
+  --destination $NEO4J_HOME/data/databases/graph.db/ \
+  --quote '"' --force</pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1082,7 +1580,7 @@ Welcome to Ubuntu 16.04.1 LTS (GNU/Linux 4.9.13-moby x86_64)
  * Support:        https://ubuntu.com/advantage
 Last login: Mon May  1 17:32:48 2017 from 172.17.0.1
 
-root@692c446a274b:~# wget https://raw.githubusercontent.com/neo4j-contrib/neo4j-etl-components/master/neo4j-etl-it/src/main/resources/scripts/oracle/northwind.sql
+root@692c446a274b:~# wget https://raw.githubusercontent.com/neo4j-contrib/neo4j-etl/master/neo4j-etl-it/src/main/resources/scripts/oracle/northwind.sql
 
 root@692c446a274b:~# sqlplus system/oracle
 
@@ -1095,17 +1593,38 @@ SQL&gt; quit;
 
 root@692c446a274b:~# exit
 
-~: export NEO4J_HOME=/path/to/neo4j-enterprise-3.1.3
+~: export NEO4J_HOME=/path/to/neo4j-enterprise-3.2.3
 
 ~: mkdir -p /tmp/northwind
 
 ~: echo '{"multiline-fields":"true"}' &gt; /tmp/northwind/options.json
 
-~: ./bin/neo4j-etl oracle export --url jdbc:oracle:thin:@localhost:49161:XE \
-      --schema northwind --user northwind --password northwind --import-tool $NEO4J_HOME/bin \
-      --options-file /tmp/northwind/options.json --csv-directory /tmp/northwind \
-      --destination $NEO4J_HOME/data/databases/graph.db/ --quote '"' --force</pre>
+~: ./bin/neo4j-etl export \
+  --rdbms:url jdbc:oracle:thin:@localhost:49161:XE \
+  --rdbms:user northwind --rdbms:password northwind \
+  --rdbms:schema northwind \
+  --import-tool $NEO4J_HOME/bin \
+  --options-file /tmp/northwind/options.json \
+  --csv-directory /tmp/northwind \
+  --destination $NEO4J_HOME/data/databases/graph.db/ \
+  --quote '"' --force</pre>
 </div>
+</div>
+<div class="paragraph">
+<div class="title">Microsoft SQL</div>
+<p>Download, start and configure the docker container with Microsoft SQL Server:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>~: docker run --name neo4j-etl-mssql -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=Passw0rd!' -p 1433:1433 -d microsoft/mssql-server-linux</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you want to connect to Microsoft SQL client console than you can run the following command:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>~: docker exec -it northwind-mssql /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'Passw0rd!' -d &lt;DATABASE&gt;</pre>
 </div>
 </div>
 </div>
@@ -1118,7 +1637,7 @@ root@692c446a274b:~# exit
 <div class="ulist">
 <ul>
 <li>
-<p>Generic { MySql | PostgreSQL | Oracle } database mapping based on the following rules</p>
+<p>Generic relational database mapping based on the following rules</p>
 </li>
 <li>
 <p>A <em>table</em> with a foreign key is treated as a <em>Join</em> and imported as a <em>node</em> with a <em>relationship</em></p>
@@ -1206,6 +1725,19 @@ root@692c446a274b:~# exit
 </div>
 </div>
 <div class="sect2">
+<h3 id="_edit_mapping_rules_via_ui">Edit Mapping Rules via UI</h3>
+<div class="paragraph">
+<p>The <code>neo4j-etl-ui</code> parses your RDBMS to GRAPH mapping file and guide you through the process of consolidating
+the property graph data model.</p>
+</div>
+<div class="paragraph">
+<p>The UI allows you to change and set you preferred <strong>label</strong> names, <strong>property</strong> names and types, <strong>relationship</strong> types, with a preview of the resulting graph.</p>
+</div>
+<div class="paragraph">
+<p>That way, you will be able to import the data in your favourite data model.</p>
+</div>
+</div>
+<div class="sect2">
 <h3 id="_exporting_data_export">Exporting Data (export)</h3>
 <div class="ulist">
 <ul>
@@ -1220,13 +1752,17 @@ root@692c446a274b:~# exit
 </div>
 </li>
 <li>
-<p>Import CSV using <code>neo4j-import</code> providing the correct labels and rel-types and headers headers</p>
-</li>
-<li>
-<p>TODO: Build indexes automatically as part of import</p>
-</li>
+<p>Import CSV providing the correct labels and rel-types and headers headers</p>
+<div class="ulist">
+<ul>
 <li>
 <p>TODO: Missing ability to pass options to <code>neo4j-import</code> tool as a file instead of command line arguments</p>
+</li>
+<li>
+<p>TODO: Create indexes and constraints related to not-primary key columns</p>
+</li>
+</ul>
+</div>
 </li>
 </ul>
 </div>
@@ -1236,7 +1772,7 @@ root@692c446a274b:~# exit
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2017-08-30 16:59:36 CEST
+Last updated 2017-09-12 01:20:32 CEST
 </div>
 </div>
 </body>

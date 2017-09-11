@@ -1,10 +1,10 @@
-= Neo4j ETL Components
+= Neo4j ETL
 
 Data import from relational databases to Neo4j.
 
 == Download & Install
 
-Download & unzip the latest https://github.com/neo4j-contrib/neo4j-etl-components/releases/latest[neo4j-etl-components.zip].
+Download & unzip the latest https://github.com/neo4j-contrib/neo4j-etl/releases/latest[neo4j-etl.zip].
 Once unzipped, download the proper JDBC Driver xref:jdbc-drivers[here] and add it to the `lib` folder.
 
 == Examples of command usage:
@@ -25,11 +25,11 @@ Once unzipped, download the proper JDBC Driver xref:jdbc-drivers[here] and add i
 --force --debug
 ----
 
-For detailed usage see also the: http://neo4j-contrib.github.io/neo4j-etl-components#neo4j-etl-cli[tool documentation].
+For detailed usage see also the: http://neo4j-contrib.github.io/neo4j-etl#neo4j-etl-cli[tool documentation].
 
 == License
 
-This tool is licensed under the http://github.com/neo4j-contrib/neo4j-etl-components/blob/master/LICENSE.txt[NEO4J PRE-RELEASE LICENSE AGREEMENT].
+This tool is licensed under the http://github.com/neo4j-contrib/neo4j-etl/blob/master/LICENSE.txt[NEO4J PRE-RELEASE LICENSE AGREEMENT].
 
 == Issues & Feedback & Contributions
 

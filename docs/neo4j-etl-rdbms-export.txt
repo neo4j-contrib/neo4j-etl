@@ -1,42 +1,71 @@
 NAME
-        neo4j-etl { mysql | postgresql | oracle } export - Export from MySQL, PostgreSQL, Oracle RDBMS.
+
+        neo4j-etl export
+
+            - Export from MySQL, PostgreSQL, Oracle and Microsoft SQL RDBMS.
 
 SYNOPSIS
-        neo4j-etl { mysql | postgresql | oracle } export
-                [ --url <url> ] [ {-h | --host} <hostname> ] [ {-p | --port} <port #> ]
-                [ {-d | --database} <name> {-s | --schema} <schema>
-                {-u | --user} <username> [ --password <password> ]
-                [ --debug ] [ --delimiter <character> ] --destination <directory>
-                [ {--exclusion-mode | --exc} <exclude|include|none(default)> ]
-                [ --force ] --import-tool <directory>
-                [ --mapping-file <file|stdin> ] [ --options-file <file> ]
-                [ --quote <character> ] --csv-directory <directory>
-                [ {--relationship-name | --rel-name} <table(default)|column> ]
-                [ {--tiny-int | --tiny} <byte(default)|boolean> ]
-                [--] [ <table1 table2 ...>... ]
+
+        neo4j-etl export
+
+            --rdbms:url <rdbms url>
+            --rdbms:user <rdbms user>
+            --rdbms:password <rdbms password>
+            [ --rdbms:schema <rdbms schema> ]
+
+            [ --using <bulk:neo4j-import* | cypher:neo4j-shell | cypher:shell | cypher:direct> ]
+
+            [ --neo4j:url <neo4j url> ]
+            [ --neo4j:user <neo4j user> ]
+            [ --neo4j:password <neo4j password> ]
+
+            --import-tool <directory>
+            --csv-directory <directory>
+            --destination <directory>
+
+            [ --mapping-file <file | stdin> ]
+
+            [ { --exclusion-mode | --exc } <none* | exclude | include> ]
+            [ { --relationship-name | --rel-name } <table* | column> ]
+            [ { --tiny-int | --tiny } <byte* | boolean> ]
+            [ --delimiter <character> ]
+            [ --options-file <file> ]
+            [ --quote <character> ]
+            [ --force ]
+            [ --debug ]
 
 OPTIONS
-        --url <name>
-            Database connection URL.
-            This parameter is alternative to `--host`, `--port` and `--database`.
 
-        -h <hostname>, --host <hostname>
-            Host to use for connection to RDBMS.
+        --rdbms:url <name>
+            RDBMS connection URL.
 
-        -p <port #>, --port <port #>
-            Port number to use for connection to RDBMS.
+        --rdbms:user <username>
+            RDBMS login user.
 
-        -d <name>, --database <name>
-            Database name.
+        --rdbms:password <password>
+            RDBMS login password.
 
-        -u <username>, --user <username>
-            User for login to RDBMS.
+        --rdbms:schema <schema>
+            RDBMS schema to be exported.
 
-        --password <password>
-            Password for login to RDBMS.
+        --using
+            Import strategy
+            1) 'bulk:neo4j-import' (default): use "neo4j-import" tool for initial *offline* bulk load;
+            2) 'cypher:neo4j-shell': use "neo4j-shell" tool for incremental *offline* bulk load;
+            3) 'cypher:shell': use "cypher-shell" tool for incremental *online* single-transaction load;
+            4) 'cypher:direct': use the "java bolt driver" for incremental *online* batch load.
 
-        -s <schema>, --schema <schema>
-            Schema to be exported.
+            --neo4j:url <name>, --neo4j:user <username>, --neo4j:password <password> are mandatory parameters
+            in case of strategies 3) and 4) and the NEO4J database must be online.
+
+        --neo4j:url <name>
+            NEO4J connection URL.
+
+        --neo4j:user <username>
+            NEO4J login user.
+
+        --neo4j:password <password>
+            NEO4J login password.
 
         --debug
             Print detailed diagnostic output.
@@ -50,8 +79,7 @@ OPTIONS
         --destination <directory>
             Path to destination store directory.
 
-        --exclusion-mode <exclude|include|none(default)>, --exc
-        <exclude|include|none(default)>
+        --exclusion-mode <exclude|include|none(default)>, --exc <exclude|include|none(default)>
             Specifies how to handle table exclusion. Options are mutually
             exclusive.exclude: Excludes specified tables from the process. All
             other tables will be included.include: Includes specified tables
@@ -90,3 +118,22 @@ OPTIONS
         <table1 table2 ...>
             Tables to be excluded/included
 
+DEPRECATED OPTIONS
+
+        -h <hostname>, --host <hostname>
+            RDBMS connection host.
+
+        -p <port #>, --port <port #>
+            RDBMS connection port.
+
+        -d <name>, --database <name>
+            RDBMS database name.
+
+        --u <username>, --user <username>
+            RDBMS login user.
+
+        --password <password>
+            RDBMS login password.
+
+        -s <schema>, --schema <schema>
+            RDBMS schema to be exported.

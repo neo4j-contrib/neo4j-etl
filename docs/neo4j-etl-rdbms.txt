@@ -1,31 +1,86 @@
 NAME
-        neo4j-etl { mysql | postgresql | oracle }  - Export tools for MySQL, PostgreSQL and Oracle RDBMS.
+
+        neo4j-etl
+
+            - Export tools for MySQL, PostgreSQL, Oracle and Microsoft SQL RDBMS.
 
 SYNOPSIS
-        neo4j-etl { mysql | postgresql | oracle } { export | generate-metadata-mapping | help* } [--]
-                [cmd-options] <cmd-args>
+
+        neo4j-etl { ui | export | generate-metadata-mapping | help* }
+
+            [--] [cmd-options] <cmd-args>
 
         Where command-specific options [cmd-options] are:
-            export: [ --debug ] [ --url <url> ] [ {-h | --host} <hostname> ] [ {-p | --port} <port #> ]
-                    {-d | --database} <name> [ {-s | --schema} <schema> ]
-                    {-u | --user} <username> [ --password <password> ]
-                    [ --options-file <file> ] --destination <directory>  [ --delimiter <character> ]
-                    [ --mapping-file <file|stdin> ] [ --quote <character> ]
-                    [ {--exclusion-mode | --exc} <exclude|include|none(default)> ]
-                    --import-tool <directory> [ {--relationship-name | --rel-name} <table(default)|column> ]
-                    [ {--tiny-int | --tiny} <byte(default)|boolean> ] --csv-directory <directory> [ --force ]
-            generate-metadata-mapping: [ --debug ] [ {-url} <url> ] [ {-h | --host} <name> ] [ {-p | --port} <port #> ]
-                    {-d | --database} <name> {-s | --schema} <schema>
-                    {-u | --user} <name> [ --password <name> ]
-                    [ --options-file <file> ] [ {--relationship-name | --rel-name} <table(default)|column> ]
-                    [ --tiny-int <byte(default)|boolean> ] [ --delimiter <delimiter> ]
-                    [ --quote <quote> ] [ {--exclusion-mode | --exc} <exclude|include|none(default)> ]
+
+            ui:
+
+                --port <port>
+
+            export:
+
+                --rdbms:url <rdbms url>
+                --rdbms:user <rdbms user>
+                --rdbms:password <rdbms password>
+                [ --rdbms:schema <rdbms schema> ]
+
+                [ --using <bulk:neo4j-import* | cypher:neo4j-shell | cypher:shell | cypher:direct> ]
+
+                [ --neo4j:url <neo4j url> ]
+                [ --neo4j:user <neo4j user> ]
+                [ --neo4j:password <neo4j password> ]
+
+                --import-tool <directory>
+                --csv-directory <directory>
+                --destination <directory>
+
+                [ --mapping-file <file | stdin> ]
+
+                [ { --exclusion-mode | --exc } <none* | exclude | include> ]
+                [ { --relationship-name | --rel-name } <table* | column> ]
+                [ { --tiny-int | --tiny } <byte* | boolean> ]
+                [ --delimiter <character> ]
+                [ --options-file <file> ]
+                [ --quote <character> ]
+                [ --force ]
+                [ --debug ]
+
+            generate-metadata-mapping:
+
+                --rdbms:url <rdbms url>
+                --rdbms:user <rdbms user>
+                --rdbms:password <rdbms password>
+                [ { --rdbms:schema } <schema> ]
+
+                [ { --exclusion-mode | --exc } <none* | exclude | include> ]
+                [ { --relationship-name | --rel-name } <table* | column> ]
+                [ { --tiny-int | --tiny } <byte* | boolean> ]
+                [ --delimiter <character> ]
+                [ --options-file <file> ]
+                [ --quote <quote> ]
+                [ --debug ]
+
             help:
 
         Where command-specific arguments <cmd-args> are:
+
+            ui: { start* | stop }
             export: [ <table1 table2 ...>... ]
             generate-metadata-mapping: [ <table1 table2 ...>... ]
             help: [ <command>... ]
 
         Where * indicates the default command(s)
-        See 'neo4j-etl help { mysql | postgresql | oracle } <command>' for more information on a specific command.
+        See 'neo4j-etl help <command>' for more information on a specific command.
+
+        Note:
+
+            Previous releases' parameters are still maintained for retro-compatibility,
+            but they've been marked as deprecated and may be removed in future versions.
+
+            export:
+            generate-metadata-mapping:
+
+                    the triple { -h | --host } <host> { -p | --port } <port> { -d | --database } <database>
+                    has been deprecated in favour of --rdbms:url <rdbms url>
+
+                    { -s | --schema } <schema> has been deprecated in favour of --rdbms:schema <schema>
+

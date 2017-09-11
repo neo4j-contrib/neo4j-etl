@@ -1,40 +1,40 @@
 NAME
-        neo4j-etl { mysql | postgresql | oracle } generate-metadata-mapping - Create MySQL to Neo4j
-        metadata mapping Json.
+
+        neo4j-etl generate-metadata-mapping
+
+            - Create RDBMS to Neo4j metadata mapping Json.
 
 SYNOPSIS
-        neo4j-etl { mysql | postgresql | oracle } generate-metadata-mapping
-                [ --url <url> ] [ {-h | --host} <hostname> ] [ {-p | --port} <port #> ]
-                [ {-d | --database} <name> {-s | --schema} <schema>
-                {-u | --user} <username> [ --password <password> ]
-                [ --debug ] [ --delimiter <delimiter> ]
-                [ {--exclusion-mode | --exc} <exclude|include|none(default)> ]
-                [ --options-file <file> ] [ --quote <quote> ]
-                [ {--relationship-name | --rel-name} <table(default)|column> ]
-                [ --tiny-int <byte(default)|boolean> ] [--] [ <table1 table2 ...>... ]
+        neo4j-etl generate-metadata-mapping
+
+            --rdbms:url <rdbms url>
+            --rdbms:user <rdbms user>
+            --rdbms:password <rdbms password>
+            [ --rdbms:schema <rdbms schema> ]
+
+            [ { --exclusion-mode | --exc } <none* | exclude | include> ]
+            [ { --relationship-name | --rel-name } <table* | column> ]
+            [ { --tiny-int | --tiny } <byte* | boolean> ]
+            [ --delimiter <character> ]
+            [ --options-file <file> ]
+            [ --quote <quote> ]
+            [ --debug ]
+
+            [--] [ <table1 table2 ...>... ]
 
 OPTIONS
-        --url <url>
-            Database connection URL.
-            This parameter is alternative to `--host`, `--port` and `--database`.
 
-        -h <name>, --host <name>
-            Host to use for connection to RDBMS.
+        --rdbms:url <name>
+            RDBMS connection URL.
 
-        -p <#>, --port <#>
-            Port number to use for connection to RDBMS.
+        --rdbms:user <username>
+            RDBMS login user.
 
-        -d <name>, --database <name>
-            Database name.
+        --rdbms:password <password>
+            RDBMS login password.
 
-        -u <name>, --user <name>
-            User for login to RDBMS.
-
-        --password <name>
-            Password for login to RDBMS.
-
-        -s <schema>, --schema <schema>
-            Schema to be exported.
+        --rdbms:schema <schema>
+            RDBMS schema to be exported.
 
         --debug
             Print detailed diagnostic output.
@@ -42,8 +42,7 @@ OPTIONS
         --delimiter <delimiter>
             Delimiter to separate fields in CSV.
 
-        --exclusion-mode <exclude|include|none(default)>, --exc
-        <exclude|include|none(default)>
+        --exclusion-mode <exclude|include|none(default)>, --exc <exclude|include|none(default)>
             Specifies how to handle table exclusion. Options are mutually
             exclusive.exclude: Excludes specified tables from the process. All
             other tables will be included.include: Includes specified tables
@@ -72,3 +71,22 @@ OPTIONS
         <table1 table2 ...>
             Tables to be excluded/included
 
+DEPRECATED OPTIONS
+
+        -h <hostname>, --host <hostname>
+            RDBMS connection host.
+
+        -p <port #>, --port <port #>
+            RDBMS connection port.
+
+        -d <name>, --database <name>
+            RDBMS database name.
+
+        --u <username>, --user <username>
+            RDBMS login user.
+
+        --password <password>
+            RDBMS login password.
+
+        -s <schema>, --schema <schema>
+            RDBMS schema to be exported.

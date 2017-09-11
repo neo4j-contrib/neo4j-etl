@@ -1,5 +1,7 @@
 NAME
-        neo4j-etl help - Display help information
+        neo4j-etl help
+
+            - Display help information
 
 SYNOPSIS
         neo4j-etl help [--] [ <command>... ]
