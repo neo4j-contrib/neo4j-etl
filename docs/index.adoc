@@ -68,15 +68,15 @@ include::neo4j-etl.adoc[]
 
 * Generic relational database mapping based on the following rules
 * A _table_ with a foreign key is treated as a _Join_ and imported as a _node_ with a _relationship_
-* Ex: `*Person* -> Address` is imported as `*(Person)-[:ADDRESS_ID]->*(Address)`
+* Ex: `+*Person* -> Address+` is imported as `+*(Person)-[:ADDRESS_ID]->*(Address)+`
 * A _table_ that has two foreign keys is imported as a _JoinTable_ and imported as a _relationship_
-* Ex: `Student <- *Student_Course* -> Course` is imported as  +
-`(Student) -[*:STUDENT_COURSE*]-> (Course)`
+* Ex: `+Student <- *Student_Course* -> Course+` is imported as  +
+`+(Student) -[*:STUDENT_COURSE*]-> (Course)+`
 * A _table_ that has more than two foreign keys is treated as an _intermediate node_ and imported as _node with multiple relationships_
-* Ex: `*Order_Detail* -> Shipping_Address, *Order_Detail* -> Payment_Information, *Order_Detail* -> Shipment_Instructions` is imported as, +
- `(Shipping_Address) *-[:SHIPPING]-> (Order_Detail)*` +
- `(Payment_Information) *-[:PAYMENT]-> (Order_Detail)*` +
- `(Shipment_Instructions) *-[:SHIPMENT]-> (Order_Detail)*` +
+* Ex: `+*Order_Detail* -> Shipping_Address, *Order_Detail* -> Payment_Information, *Order_Detail* -> Shipment_Instructions+` is imported as, +
+ `+(Shipping_Address) *-[:SHIPPING]-> (Order_Detail)*#` +
+ `+(Payment_Information) *-[:PAYMENT]-> (Order_Detail)*+` +
+ `+(Shipment_Instructions) *-[:SHIPMENT]-> (Order_Detail)*+` +
 
 
 * Resolve relationships through composite keys.
@@ -100,14 +100,11 @@ include::neo4j-etl.adoc[]
 ** Ex: A loan has the SSN of the loan applicant which would normally be used to connect the `Loan` and `Person` nodes. 
 ** With this flag the `Loan` node will also keep the `SSN` as a property.
 
-=== Edit Mapping Rules via UI
+=== Edit Mapping via UI
 
-The `neo4j-etl-ui` parses your RDBMS to GRAPH mapping file and guide you through the process of consolidating
-the property graph data model.
+A Neo4j-ETL graph application can be added Neo4j Desktop which allows visual editing of the mapping and interactive import.
 
 The UI allows you to change and set you preferred *label* names, *property* names and types, *relationship* types, with a preview of the resulting graph.
-
-That way, you will be able to import the data in your favourite data model.
 
 === Exporting Data (export)
 
@@ -116,3 +113,4 @@ That way, you will be able to import the data in your favourite data model.
 * Import CSV providing the correct labels and rel-types and headers headers
 ** TODO: Missing ability to pass options to `neo4j-import` tool as a file instead of command line arguments
 ** TODO: Create indexes and constraints related to not-primary key columns
+ 

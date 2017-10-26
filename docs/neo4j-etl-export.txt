@@ -1,0 +1,112 @@
+NAME
+        neo4j-etl export - Export from RDBMS and import into NEO4J via CSV
+        files.
+
+SYNOPSIS
+        neo4j-etl export --csv-directory <csv directory>
+                [ {-d | --database} <RDBMS database> ] [ --debug ]
+                [ --delimiter <character> ] [ --destination <directory> ]
+                [ {--exclusion-mode | --exc} <exclude|include|none(default)> ]
+                [ --force ] --import-tool <import tool path>
+                [ --mapping-file <file|stdin> ] [ {--neo4j:password | --graph:password | --graph:neo4j:password} <neo4j password> ]
+                [ {--neo4j:url | --graph:url | --graph:neo4j:url} <neo4j url> ]
+                [ {--neo4j:user | --graph:user | --graph:neo4j:user} <neo4j user> ]
+                [ --options-file <options file> ] [ --quote <character> ]
+                --rdbms:password <RDBMS password>
+                [ {--rdbms:schema | -s | --schema} <schema> ]
+                [ --rdbms:url <RDBMS url> ] --rdbms:user <RDBMS user>
+                [ {--relationship-name | --rel-name} <table(default)|column> ]
+                [ {--tiny-int | --tiny} <byte(default)|boolean> ]
+                [ --using <import tool> ] [--] [ <table1 table2 ...>... ]
+
+OPTIONS
+        --csv-directory <csv directory>
+            Path to directory for intermediate CSV files.
+
+        -d <RDBMS database>, --database <RDBMS database>
+            RDBMS database.
+
+            This option is required if any of the following options are
+            specified: host
+
+
+        --debug
+            Print detailed diagnostic output.
+
+        --delimiter <character>
+            Delimiter to separate fields in CSV.
+
+        --destination <directory>
+            Path to destination store directory.
+
+        --exclusion-mode <exclude|include|none(default)>, --exc
+        <exclude|include|none(default)>
+            Specifies how to handle table exclusion. Options are mutually
+            exclusive.exclude: Excludes specified tables from the process. All
+            other tables will be included.include: Includes specified tables
+            only. All other tables will be excluded.none: All tables are
+            included in the process.
+
+        --force
+            Force delete destination store directory if it already exists.
+
+        --import-tool <import tool path>
+            Path to directory containing Neo4j import tool.
+
+        --mapping-file <file|stdin>
+            Path to an existing metadata mapping file. The name 'stdin' will
+            cause the CSV resources definitions to be read from standard input.
+
+        --neo4j:password <neo4j password>, --graph:password <neo4j password>,
+        --graph:neo4j:password <neo4j password>
+            Password for login to Neo4j.
+
+        --neo4j:url <neo4j url>, --graph:url <neo4j url>, --graph:neo4j:url
+        <neo4j url>
+            Url to use for connection to Neo4j.
+
+        --neo4j:user <neo4j user>, --graph:user <neo4j user>, --graph:neo4j:user
+        <neo4j user>
+            User for login to Neo4j.
+
+        --options-file <options file>
+            Path to file containing Neo4j import tool options.
+
+        --quote <character>
+            Character to treat as quotation character for values in CSV data.
+
+        --rdbms:password <RDBMS password>
+            Password for login to RDBMS.
+
+        --rdbms:schema <schema>, -s <schema>, --schema <schema>
+            RDBMS schema.
+
+        --rdbms:url <RDBMS url>
+            Url to use for connection to RDBMS.
+
+            This option is part of the group 'database' from which only one
+            option may be specified
+
+
+        --rdbms:user <RDBMS user>
+            User for login to RDBMS.
+
+        --relationship-name <table(default)|column>, --rel-name
+        <table(default)|column>
+            Specifies whether to get the name for relationships from table names
+            or column names
+
+        --tiny-int <byte(default)|boolean>, --tiny <byte(default)|boolean>
+            Specifies whether to get the convert TinyInt to byte or boolean
+
+        --using <import tool>
+            Import tool that will be used to load data into neo4j.
+
+        --
+            This option can be used to separate command-line options from the
+            list of arguments (useful when arguments might be mistaken for
+            command-line options)
+
+        <table1 table2 ...>
+            Tables to be excluded/included
+

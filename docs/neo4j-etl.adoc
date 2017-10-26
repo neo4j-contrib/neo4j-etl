@@ -33,10 +33,6 @@ NOTE: For very large databases make sure to have enough disk-space for the CSV e
 
 === Available commands
 
-----
-include::neo4j-etl-rdbms.txt[]
-----
-
 === 'help' command
 
 ----
@@ -46,19 +42,13 @@ include::neo4j-etl-help.txt[]
 === 'generate-metadata-mapping' command
 
 ----
-include::neo4j-etl-rdbms-generate-metadata-mapping.txt[]
-----
-
-=== 'ui' command
-
-----
-include::neo4j-etl-rdbms-ui.txt[]
+include::neo4j-etl-generate-metadata-mapping.txt[]
 ----
 
 === 'export' command
 
 ----
-include::neo4j-etl-rdbms-export.txt[]
+include::neo4j-etl-export.txt[]
 ----
 
 == Example Session: Basic
@@ -66,47 +56,22 @@ include::neo4j-etl-rdbms-export.txt[]
 === Generate Metadata Mapping
 
 ----
-~: export NEO4J_HOME=/path/to/neo4j-enterprise-3.2.3
+export NEO4J_HOME=/path/to/neo4j-enterprise-3.3.0
 
-~: mkdir -p /tmp/northwind
+mkdir -p /tmp/northwind
 
-~: $NEO4J_HOME/bin/neo4j-etl generate-metadata-mapping \
+$NEO4J_HOME/bin/neo4j-etl generate-metadata-mapping \
   --rdbms:url jdbc:oracle:thin:@localhost:49161:XE \
   --rdbms:user northwind --rdbms:password northwind \
   --rdbms:schema northwind > /tmp/northwind/mapping.json
 ----
 
-=== Edit Metadata Mapping via User Interface
-
-----
-STEP 1: Generate Metadata Mapping File (via command line)
-
-Just follow the above instructions.
-
-STEP 2: Inspect and adjust the graph data model (via user interface)
-
-~: $NEO4J_HOME/bin/neo4j-etl ui start
-
-~: open http://localhost:3000
-
-Once satisfied, save the consolidated mapping file (i.e. /tmp/northwind/edited-mapping.json) and stop the ui
-
-~: $NEO4J_HOME/bin/neo4j-etl ui stop
-
-STEP 3: Import your data into Neo4j using the just exported Metadata Mapping (again via command line)
-
-You can use any of the below alternatives, but don't forget to add the following command option:
-
-  --mapping-file /tmp/northwind/edited-mapping.json
-
-----
-
 === Offline Bulk Import via `neo4j-import` tool for initial load (neo4j must be empty)
 
 ----
-~: echo '{ "multiline-fields" : "true" }' > /tmp/northwind/options.json
+echo '{ "multiline-fields" : "true" }' > /tmp/northwind/options.json
 
-~: $NEO4J_HOME/bin/neo4j-etl export  \
+$NEO4J_HOME/bin/neo4j-etl export  \
   --rdbms:url jdbc:oracle:thin:@localhost:49161:XE \
   --rdbms:user northwind --rdbms :password northwind \
   --rdbms:schema northwind \
@@ -117,10 +82,9 @@ You can use any of the below alternatives, but don't forget to add the following
   --quote '"' --force
 ----
 
-- Test Offline Bulk Import result
-
+.Test Offline Bulk Import result
 ----
-~: $NEO4J_HOME/bin/neo4j-shell -path $NEO4J_HOME/data/databases/graph.db/ -c 'MATCH (n) RETURN labels(n), count(*);'
+$NEO4J_HOME/bin/neo4j-shell -path $NEO4J_HOME/data/databases/graph.db/ -c 'MATCH (n) RETURN labels(n), count(*);'
 
 # +--------------------------+
 # | labels(n)     | count(*) |
@@ -141,9 +105,9 @@ You can use any of the below alternatives, but don't forget to add the following
 === Online Batch Import via `java-bolt-driver` for incremental load (neo4j can be already populated)
 
 ----
-~: echo '{ "multiline-fields" : "true" }' > /tmp/northwind/options.json
+echo '{ "multiline-fields" : "true" }' > /tmp/northwind/options.json
 
-~: $NEO4J_HOME/bin/neo4j-etl export  \
+$NEO4J_HOME/bin/neo4j-etl export  \
   --rdbms:url jdbc:oracle:thin:@localhost:49161:XE \
   --rdbms:user northwind --rdbms:password northwind \
   --rdbms:schema northwind \
@@ -156,10 +120,9 @@ You can use any of the below alternatives, but don't forget to add the following
   --quote '"' --force
 ----
 
-- Test Online Batch Incremental Import result
-
+.Test Online Batch Incremental Import result
 ----
-~: $NEO4J_HOME/bin/cypher-shell -a bolt://localhost:7687 -u neo4j -p neo4j 'MATCH (n) RETURN labels(n), count(*);'
+$NEO4J_HOME/bin/cypher-shell -a bolt://localhost:7687 -u neo4j -p neo4j 'MATCH (n) RETURN labels(n), count(*);'
 
 # +--------------------------+
 # | labels(n)     | count(*) |
@@ -188,16 +151,16 @@ DDL scripts are available here:
 - https://raw.githubusercontent.com/neo4j-contrib/neo4j-etl/master/neo4j-etl-it/src/main/resources/scripts/oracle/northwind.sql[Oracle]
 - https://raw.githubusercontent.com/neo4j-contrib/neo4j-etl/master/neo4j-etl-it/src/main/resources/scripts/mssql/northwind.sql[Microsoft SQL]
 
-.MySQL
+=== MySQL
 
 Download, start and configure the docker container with MySQL:
 
 ----
-~: docker pull mysql
+docker pull mysql
 
-~: docker run --name neo4j-etl-mysql -e MYSQL_ROOT_PASSWORD=admin -e MYSQL_DATABASE=northwind -e MYSQL_USER=neo4j -e MYSQL_PASSWORD=neo4j -d -p 3306:3306 mysql:latest
+docker run --name neo4j-etl-mysql -e MYSQL_ROOT_PASSWORD=admin -e MYSQL_DATABASE=northwind -e MYSQL_USER=neo4j -e MYSQL_PASSWORD=neo4j -d -p 3306:3306 mysql:latest
 
-~: docker exec -it neo4j-etl-mysql bash
+docker exec -it neo4j-etl-mysql bash
 root@eb6f279fdb88:/# mysql -u root -p
 Enter password: admin
 Welcome to the MySQL monitor.  Commands end with ; or \g.
@@ -219,17 +182,19 @@ mysql> quit;
 Bye
 root@bf99fbc0d31c:/# exit
 exit
+----
 
 Load the database via the following sql script:
 https://raw.githubusercontent.com/neo4j-contrib/neo4j-etl/master/neo4j-etl-it/src/main/resources/scripts/mysql/northwind.sql
 
-~: export NEO4J_HOME=/path/to/neo4j-enterprise-3.2.3
+----
+export NEO4J_HOME=/path/to/neo4j-enterprise-3.2.3
 
-~: mkdir -p /tmp/northwind
+mkdir -p /tmp/northwind
 
-~: echo '{ "multiline-fields" : "true" }' > /tmp/northwind/options.json
+echo '{ "multiline-fields" : "true" }' > /tmp/northwind/options.json
 
-~: ./bin/neo4j-etl export \
+./bin/neo4j-etl export \
   --rdbms:url jdbc:mysql://localhost:5433/northwind?autoReconnect=true&useSSL=false \
   --rdbms:user neo4j --rdbms:password neo4j \
   --import-tool $NEO4J_HOME/bin \
@@ -239,16 +204,16 @@ https://raw.githubusercontent.com/neo4j-contrib/neo4j-etl/master/neo4j-etl-it/sr
   --quote '"' --force
 ----
 
-.PostgreSQL
+=== PostgreSQL
 
 Download, start and configure the docker container with PostgreSQL 9.6.2:
 
 ----
-~: docker pull postgres
+docker pull postgres
 
-~: docker run --name neo4j-etl-postgres -e POSTGRES_USER=neo4j -e POSTGRES_PASSWORD=neo4j -d -p 5433:5432 postgres
+docker run --name neo4j-etl-postgres -e POSTGRES_USER=neo4j -e POSTGRES_PASSWORD=neo4j -d -p 5433:5432 postgres
 
-~: docker run -it --rm --link neo4j-etl-postgres:postgres postgres psql -h postgres -U neo4j
+docker run -it --rm --link neo4j-etl-postgres:postgres postgres psql -h postgres -U neo4j
 Password for user neo4j:
 psql (9.6.2)
 Type "help" for help.
@@ -262,13 +227,13 @@ Load the database via the following sql script:
 https://raw.githubusercontent.com/neo4j-contrib/neo4j-etl/master/neo4j-etl-it/src/main/resources/scripts/postgresql/northwind.sql[northwind.sql]
 
 ----
-~: export NEO4J_HOME=/path/to/neo4j-enterprise-3.2.3
+export NEO4J_HOME=/path/to/neo4j-enterprise-3.2.3
 
-~: mkdir -p /tmp/northwind
+mkdir -p /tmp/northwind
 
-~: echo '{"multiline-fields":"true"}' > /tmp/northwind/options.json
+echo '{"multiline-fields":"true"}' > /tmp/northwind/options.json
 
-~: ./bin/neo4j-etl export \
+./bin/neo4j-etl export \
   --rdbms:url jdbc:postgresql://localhost:5433/northwind?ssl=false \
   --rdbms:user neo4j --rdbms:password neo4j \
   --import-tool $NEO4J_HOME/bin \
@@ -278,16 +243,16 @@ https://raw.githubusercontent.com/neo4j-contrib/neo4j-etl/master/neo4j-etl-it/sr
   --quote '"' --force
 ----
 
-.Oracle
+=== Oracle
 
 Download, start and configure the docker container with Oracle XE 11g:
 
 ----
-~: docker pull wnameless/oracle-xe-11g
+docker pull wnameless/oracle-xe-11g
 
-~: docker run --name neo4j-etl-oracle -d -p 49160:22 -p 49161:1521 wnameless/oracle-xe-11g
+docker run --name neo4j-etl-oracle -d -p 49160:22 -p 49161:1521 wnameless/oracle-xe-11g
 
-~: ssh root@localhost -p 49160
+ssh root@localhost -p 49160
 root@localhost's password: admin
 
 Welcome to Ubuntu 16.04.1 LTS (GNU/Linux 4.9.13-moby x86_64)
@@ -310,13 +275,13 @@ SQL> quit;
 
 root@692c446a274b:~# exit
 
-~: export NEO4J_HOME=/path/to/neo4j-enterprise-3.2.3
+export NEO4J_HOME=/path/to/neo4j-enterprise-3.2.3
 
-~: mkdir -p /tmp/northwind
+mkdir -p /tmp/northwind
 
-~: echo '{"multiline-fields":"true"}' > /tmp/northwind/options.json
+echo '{"multiline-fields":"true"}' > /tmp/northwind/options.json
 
-~: ./bin/neo4j-etl export \
+./bin/neo4j-etl export \
   --rdbms:url jdbc:oracle:thin:@localhost:49161:XE \
   --rdbms:user northwind --rdbms:password northwind \
   --rdbms:schema northwind \
@@ -327,18 +292,18 @@ root@692c446a274b:~# exit
   --quote '"' --force
 ----
 
-.Microsoft SQL
+=== Microsoft SQL
 
 Download, start and configure the docker container with Microsoft SQL Server:
 
 ----
-~: docker run --name neo4j-etl-mssql -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=Passw0rd!' -p 1433:1433 -d microsoft/mssql-server-linux
+docker run --name neo4j-etl-mssql -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=Passw0rd!' -p 1433:1433 -d microsoft/mssql-server-linux
 
 ----
 
 If you want to connect to Microsoft SQL client console than you can run the following command:
 ----
-~: docker exec -it northwind-mssql /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'Passw0rd!' -d <DATABASE>
+docker exec -it northwind-mssql /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'Passw0rd!' -d <DATABASE>
 ----
 
 ////

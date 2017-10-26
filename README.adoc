@@ -1,37 +1,113 @@
+image:https://travis-ci.org/neo4j-contrib/neo4j-etl.svg[alt="Travis CI Status", link="https://travis-ci.org/neo4j-contrib/neo4j-etl"]
+image:https://img.shields.io/github/release/neo4j-contrib/neo4j-etl.svg[alt="Github release status"]
+image:https://img.shields.io/github/contributors/neo4j-contrib/neo4j-etl.svg[alt="contributor stats"]
+
 = Neo4j ETL
+:img: docs/img
 
-Data import from relational databases to Neo4j.
+Neo4j ETL allows importing data from relational databases into Neo4j.
 
-== Download & Install
+== Features
 
-Download & unzip the latest https://github.com/neo4j-contrib/neo4j-etl/releases/latest[neo4j-etl.zip].
-Once unzipped, download the proper JDBC Driver xref:jdbc-drivers[here] and add it to the `lib` folder.
-
-== Examples of command usage:
-
-.Minimal command line
-----
-./bin/neo4j-etl { mysql | postgresql | oracle } export --url <url> --user <user> --password <pwd> \
- --destination $NEO4J_HOME/data/databases/graph.db/ --import-tool $NEO4J_HOME/bin  \
- --csv-directory /tmp/northwind
-----
-
-.Full set of command line options
-----
-./bin/neo4j-etl { mysql | postgresql | oracle } export --url <url> --user <user> --password <pwd> \
---database <database> --destination $NEO4J_HOME/data/databases/graph.db/ \
---import-tool $NEO4J_HOME/bin --csv-directory /tmp  \
---options-file ./import-tool-options.json
---force --debug
-----
-
-For detailed usage see also the: http://neo4j-contrib.github.io/neo4j-etl#neo4j-etl-cli[tool documentation].
+// * Wizard UI in Neo4j Desktop
+* Manage multiple rdbms connections
+* automatically extract database metadata from relational database
+* derive graph model
+* visually edit labels, relationship-types, property-names and types
+* visualize current model as a graph
+* persist mapping as json
+* dump relevant CSV from relational databases
+* run import via neo4j-import, bolt-connector, cypher-shell, neo4j-shell
+* bundles mysql, postgres, allows custom jdbc driver with Neo4j Enterprise
 
 == License
 
-This tool is licensed under the http://github.com/neo4j-contrib/neo4j-etl/blob/master/LICENSE.txt[NEO4J PRE-RELEASE LICENSE AGREEMENT].
+This tool is licensed under the link:LICENSE.txt[NEO4J PRE-RELEASE LICENSE AGREEMENT].
 
 == Issues & Feedback & Contributions
 
 * You can raise link:issues[GitHub issues] or send feedback to feedback@neo4j.com
 * Please also join our http://neo4j.com/slack[neo4j-users Slack] and ask in the  #help-import channel
+
+== Download & Run
+
+Download & unzip the latest https://github.com/neo4j-contrib/neo4j-etl/releases/latest[neo4j-etl.zip].
+
+== Examples of command usage:
+
+.Minimal command line
+----
+./bin/neo4j-etl export \
+ --rdbms:url <url> --rdbms:user <user> --rdbms:password <password> \
+ --destination $NEO4J_HOME/data/databases/graph.db/ --import-tool $NEO4J_HOME/bin \
+ --csv-directory $NEO4J_HOME/import
+----
+
+.Full set of command line options
+----
+./bin/neo4j-etl export \
+ --rdbms:url <url> --rdbms:user <user> --rdbms:password <password> --rdbms:schema <schema> \
+ --using { bulk:neo4j-import | cypher:neo4j-shell | cypher:shell | cypher:direct } \
+ --neo4j:url <neo4j url> --neo4j:user <neo4j user> --neo4j:password <neo4j password> \
+ --destination $NEO4J_HOME/data/databases/graph.db/ --import-tool $NEO4J_HOME/bin \
+ --csv-directory $NEO4J_HOME/import --options-file import-tool-options.json --force --debug
+----
+
+For detailed usage see also the: http://neo4j-contrib.github.io/neo4j-etl#neo4j-etl-cli[tool documentation].
+
+== Neo4j-Desktop
+
+You can add Neo4j ETL to Neo4j Desktop by adding the following lines to your `$DESKTOP/Application/graphApps.json`
+
+[source,json]
+----
+[
+    {
+        "appId": "neo4j-etl-ui",
+        "appName": "ETL App",
+        "packageUrl": "https://neo.jfrog.io/neo/api/npm/npm/neo4j-etl-ui"
+    }
+]
+----
+
+Then the next time you start Neo4j Desktop you'll see Neo4j ETL as a UI to be used interactively.
+
+[cols="4*^.^",opts=header]
+|===
+| Configure Driver
+| Load Mapping
+| Edit Mapping
+| Import Data
+| image:{img}/driver.jpg[width=200]
+| image:{img}/load-mapping.jpg[width=200]
+| image:{img}/edit-mapping.jpg[width=200]
+| image:{img}/import-data.jpg[width=200]
+|===
+
+.Location of $DESKTOP
+|===
+| macOS | ~/Library/Application Support/Neo4j Desktop |
+| Windows | %APPDATA%/Neo4j Desktop |
+| Linux | ~/.config/Neo4j Desktop |
+|===
+
+== JDBC Drivers
+
+Neo4j ETL bundles drivers for MySQL and PostgreSQL, for other database if you use Neo4j Enterprise you can specify your own JDBC driver.
+
+[[jdbc-drivers]]
+|===
+|Vendor |JDBC Driver URL
+
+|https://www.mysql.com/[MySql]
+|http://dev.mysql.com/downloads/connector/j/
+
+|http://www.postgresql.com/[PostgreSQL]
+|https://jdbc.postgresql.org/download.html
+
+|https://www.oracle.com/[Oracle]
+|http://www.oracle.com/technetwork/database/features/jdbc/default-2280470.html
+
+|https://www.microsoft.com/en-us/sql-server/[Microsoft SQL Server]
+|https://www.microsoft.com/en-us/download/details.aspx?id=55539
+|===

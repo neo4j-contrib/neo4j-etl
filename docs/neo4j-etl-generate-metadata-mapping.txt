@@ -1,0 +1,88 @@
+NAME
+        neo4j-etl generate-metadata-mapping - Create RDBMS to Neo4j metadata
+        mapping Json.
+
+SYNOPSIS
+        neo4j-etl generate-metadata-mapping
+                [ {-d | --database} <RDBMS database> ] [ --debug ]
+                [ --delimiter <delimiter> ]
+                [ {--exclusion-mode | --exc} <exclude|include|none(default)> ]
+                [ {-h | --host} <RDBMS host> ] [ --options-file <option file> ]
+                [ {-p | --port} <RDBMS port> ] [ --quote <quote> ]
+                {--rdbms:password | --password} <RDBMS password>
+                [ {--rdbms:schema | -s | --schema} <schema> ]
+                [ {--rdbms:url | --url} <RDBMS url> ]
+                {--rdbms:user | -u | --user} <RDBMS user>
+                [ {--relationship-name | --rel-name} <table(default)|column> ]
+                [ --tiny-int <byte(default)|boolean> ] [--] [ <table1 table2 ...>... ]
+
+OPTIONS
+        -d <RDBMS database>, --database <RDBMS database>
+            RDBMS database.
+
+            This option is required if any of the following options are
+            specified: host
+
+
+        --debug
+            Print detailed diagnostic output.
+
+        --delimiter <delimiter>
+            Delimiter to separate fields in CSV.
+
+        --exclusion-mode <exclude|include|none(default)>, --exc
+        <exclude|include|none(default)>
+            Specifies how to handle table exclusion. Options are mutually
+            exclusive.exclude: Excludes specified tables from the process. All
+            other tables will be included.include: Includes specified tables
+            only. All other tables will be excluded.none: All tables are
+            included in the process.
+
+        -h <RDBMS host>, --host <RDBMS host>
+            Host to use for connection to RDBMS.
+
+            This option is part of the group 'database' from which only one
+            option may be specified
+
+
+        --options-file <option file>
+            Path to file containing Neo4j import tool options.
+
+        -p <RDBMS port>, --port <RDBMS port>
+            Port number to use for connection to RDBMS.
+
+        --quote <quote>
+            Character to treat as quotation character for values in CSV data.
+
+        --rdbms:password <RDBMS password>, --password <RDBMS password>
+            Password for login to RDBMS.
+
+        --rdbms:schema <schema>, -s <schema>, --schema <schema>
+            RDBMS schema.
+
+        --rdbms:url <RDBMS url>, --url <RDBMS url>
+            Url to use for connection to RDBMS.
+
+            This option is part of the group 'database' from which only one
+            option may be specified
+
+
+        --rdbms:user <RDBMS user>, -u <RDBMS user>, --user <RDBMS user>
+            User for login to RDBMS.
+
+        --relationship-name <table(default)|column>, --rel-name
+        <table(default)|column>
+            Specifies whether to get the name for relationships from table names
+            or column names.
+
+        --tiny-int <byte(default)|boolean>
+            Specifies whether to convert TinyInt to byte or boolean
+
+        --
+            This option can be used to separate command-line options from the
+            list of arguments (useful when arguments might be mistaken for
+            command-line options)
+
+        <table1 table2 ...>
+            Tables to be excluded/included
+

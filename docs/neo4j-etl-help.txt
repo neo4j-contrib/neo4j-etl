@@ -1,17 +1,8 @@
-NAME
-        neo4j-etl help
+usage: neo4j-etl <command> [ <args> ]
 
-            - Display help information
+Commands are:
+    export                      Export from RDBMS and import into NEO4J via CSV files.
+    generate-metadata-mapping   Create RDBMS to Neo4j metadata mapping Json.
+    help                        Display help information
 
-SYNOPSIS
-        neo4j-etl help [--] [ <command>... ]
-
-OPTIONS
-        --
-            This option can be used to separate command-line options from the
-            list of arguments (useful when arguments might be mistaken for
-            command-line options)
-
-        <command>
-
-
+See 'neo4j-etl help <command>' for more information on a specific command.
