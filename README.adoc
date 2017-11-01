@@ -55,6 +55,7 @@ Download & unzip the latest https://github.com/neo4j-contrib/neo4j-etl/releases/
 
 For detailed usage see also the: http://neo4j-contrib.github.io/neo4j-etl#neo4j-etl-cli[tool documentation].
 
+////
 == Neo4j-Desktop
 
 You can add Neo4j ETL to Neo4j Desktop by adding the following lines to your `$DESKTOP/Application/graphApps.json`
@@ -90,6 +91,8 @@ Then the next time you start Neo4j Desktop you'll see Neo4j ETL as a UI to be us
 | Windows | %APPDATA%/Neo4j Desktop |
 | Linux | ~/.config/Neo4j Desktop |
 |===
+
+////
 
 == JDBC Drivers
 
