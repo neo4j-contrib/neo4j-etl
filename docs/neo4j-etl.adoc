@@ -63,7 +63,7 @@ mkdir -p /tmp/northwind
 $NEO4J_HOME/bin/neo4j-etl generate-metadata-mapping \
   --rdbms:url jdbc:oracle:thin:@localhost:49161:XE \
   --rdbms:user northwind --rdbms:password northwind \
-  --rdbms:schema northwind > /tmp/northwind/mapping.json
+  --rdbms:schema northwind --output-mapping-file /tmp/northwind/mapping.json
 ----
 
 === Offline Bulk Import via `neo4j-import` tool for initial load (neo4j must be empty)
@@ -290,6 +290,7 @@ echo '{"multiline-fields":"true"}' > /tmp/northwind/options.json
   --csv-directory /tmp/northwind \
   --destination $NEO4J_HOME/data/databases/graph.db/ \
   --quote '"' --force
+  --driver /tmp/ojdbc6-11.2.0.3.jar
 ----
 
 === Microsoft SQL
@@ -301,9 +302,63 @@ docker run --name neo4j-etl-mssql -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD=Passw0rd!' 
 
 ----
 
-If you want to connect to Microsoft SQL client console than you can run the following command:
+If you want to connect to Microsoft SQL client console then you can run the following command:
 ----
-docker exec -it northwind-mssql /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'Passw0rd!' -d <DATABASE>
+docker exec -it neo4j-etl-mssql /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'Passw0rd!' -d <DATABASE>
+----
+
+----
+export NEO4J_HOME=/path/to/neo4j-enterprise-3.2.3
+
+mkdir -p /tmp/wideworldimporters
+
+echo '{"multiline-fields":"true"}' > /tmp/wideworldimporters/options.json
+
+./bin/neo4j-etl export \
+    --rdbms:password "Passw0rd!" \
+    --rdbms:user sa \
+    --rdbms:url "jdbc:sqlserver://localhost:1433;databaseName=WideWorldImporters" \
+    --import-tool $NEO4J_HOME/bin \
+    --options-file /tmp/wideworldimporters/options.json \
+    --csv-directory /tmp/wideworldimporters \
+    --destination $NEO4J_HOME/data/databases/graph.db/ \
+    --driver /tmp/mssql-jdbc-6.1.0.jre8.jar \
+----
+
+=== How to import World Wide Importers database into a MS SQL server Docker instance
+
+----
+# Create docker instance for MS-SQL Server
+docker run --name mssql-etl \
+-e 'ACCEPT_EULA=Y' \
+-e 'SA_PASSWORD=<YOUR_PASSWORD>' \
+-p 1433:1433 \
+-v /tmp:/tmp \
+-d microsoft/mssql-server-linux:2017-latest
+
+# Download World Wide Importers backup file
+wget https://github.com/Microsoft/sql-server-samples/releases/download/wide-world-importers-v1.0/WideWorldImporters-Full.bak
+
+# Create a backup directory
+sudo docker exec -it mssql-etl mkdir /var/opt/mssql/backup
+
+# Load backup file into the container
+sudo docker cp WideWorldImporters-Full.bak mssql-etl:/var/opt/mssql/backup
+
+# Restore Wide World Importers database
+sudo docker exec -it mssql-etl /opt/mssql-tools/bin/sqlcmd \
+-S localhost \
+-U SA \
+-P '<YOUR_PASSWORD>' \
+-Q 'RESTORE FILELISTONLY FROM DISK = "/var/opt/mssql/backup/WideWorldImporters-Full.bak"' \
+| tr -s ' ' \
+| cut -d ' ' -f 1-2
+
+sudo docker exec -it mssql-etl /opt/mssql-tools/bin/sqlcmd \
+-S localhost \
+-U SA \
+-P '<YOUR_PASSWORD>' \
+-Q 'RESTORE DATABASE WideWorldImporters FROM DISK = "/var/opt/mssql/backup/WideWorldImporters-Full.bak" WITH MOVE "WWI_Primary" TO "/var/opt/mssql/data/WideWorldImporters.mdf", MOVE "WWI_UserData" TO "/var/opt/mssql/data/WideWorldImporters_userdata.ndf", MOVE "WWI_Log" TO "/var/opt/mssql/data/WideWorldImporters.ldf", MOVE "WWI_InMemory_Data_1" TO "/var/opt/mssql/data/WideWorldImporters_InMemory_Data_1"'
 ----
 
 ////

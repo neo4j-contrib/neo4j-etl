@@ -18,6 +18,7 @@ SYNOPSIS
                 [ {--relationship-name | --rel-name} <table(default)|column> ]
                 [ {--tiny-int | --tiny} <byte(default)|boolean> ]
                 [ --using <import tool> ] [--] [ <table1 table2 ...>... ]
+                [ --driver <path to driver1> [--driver <path to driver2>... ] ]
 
 OPTIONS
         --csv-directory <csv directory>
@@ -110,3 +111,5 @@ OPTIONS
         <table1 table2 ...>
             Tables to be excluded/included
 
+        --driver <path_to_driver1> --driver <path_to_driver2> ...
+            Specifies one or more additional drivers to be used by the tool
