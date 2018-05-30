@@ -1,7 +1,3 @@
-image:https://travis-ci.org/neo4j-contrib/neo4j-etl.svg[alt="Travis CI Status", link="https://travis-ci.org/neo4j-contrib/neo4j-etl"]
-image:https://img.shields.io/github/release/neo4j-contrib/neo4j-etl.svg[alt="Github release status"]
-image:https://img.shields.io/github/contributors/neo4j-contrib/neo4j-etl.svg[alt="contributor stats"]
-
 = Neo4j ETL
 :img: docs/img
 
@@ -9,7 +5,7 @@ Neo4j ETL allows importing data from relational databases into Neo4j.
 
 == Features
 
-* Wizard UI in Neo4j Desktop
+* Neo4j-ETL UI in Neo4j Desktop
 * Manage multiple RDBMS connections
 * automatically extract database metadata from relational database
 * derive graph model
@@ -31,7 +27,7 @@ This tool is licensed under the link:LICENSE.txt[NEO4J PRE-RELEASE LICENSE AGREE
 
 == Download & Run
 
-Download & unzip the latest https://github.com/neo4j-contrib/neo4j-etl/releases/latest[neo4j-etl.zip].
+Download & unzip the latest https://github.com/neo4j-contrib/neo4j-etl/releases/latest[neo4j-etl.zip^].
 
 == Examples of command usage:
 
@@ -58,6 +54,7 @@ For detailed usage see also the: http://neo4j-contrib.github.io/neo4j-etl#neo4j-
 == Neo4j-Desktop
 
 You can add Neo4j ETL to Neo4j Desktop by adding the appropriate application key.
+Please ask your Neo4j contact or send an email to link:mailto:devrel@neo4j.com[devrel@neo4j.com^]
 
 Then the next time you start Neo4j Desktop you'll see Neo4j ETL as a UI to be used interactively.
 
@@ -96,15 +93,15 @@ And use the JDBC-URL with the `--rdbms:url` parameter or in the JDBC-URL input f
 
 |Oracle
 |jdbc:oracle:thin:<user>/<pass>@<host>:<port>/<service_name>
-|http://www.oracle.com/technetwork/database/features/jdbc/index.html[Oracle JDBC Driver]
+|http://www.oracle.com/technetwork/database/features/jdbc/index.html[Oracle JDBC Driver^]
 
 |MS SQLServer
 |jdbc:sqlserver://;servername=<servername>;databaseName=<database>;user=<user>;password=<pass>
-|https://www.microsoft.com/en-us/download/details.aspx?id=11774[SQLServer Driver]
+|https://www.microsoft.com/en-us/download/details.aspx?id=11774[SQLServer Driver^]
 
 |IBM DB2
 |jdbc:db2://<host>:<port/5021>/<database>:user=<user>;password=<pass>;
-|http://www-01.ibm.com/support/docview.wss?uid=swg21363866[DB2 Driver]
+|http://www-01.ibm.com/support/docview.wss?uid=swg21363866[DB2 Driver^]
 
 |Derby
 |jdbc:derby:derbyDB
@@ -112,18 +109,18 @@ And use the JDBC-URL with the `--rdbms:url` parameter or in the JDBC-URL input f
 
 |Cassandra 
 |jdbc:cassandra://<host>:<port/9042>/<database>
-|link:https://github.com/adejanovski/cassandra-jdbc-wrapper#installing[Cassandra JDBC Wrapper]
+|link:https://github.com/adejanovski/cassandra-jdbc-wrapper#installing[Cassandra JDBC Wrapper^]
 
 |SAP Hana
 |jdbc:sap://<host>:<port/39015>/?user=<user>&password=<pass>
-|https://www.sap.com/developer/tutorials/hxe-connect-hxe-using-jdbc.html[SAP Hana ngdbc Driver]
+|https://www.sap.com/developer/tutorials/hxe-connect-hxe-using-jdbc.html[SAP Hana ngdbc Driver^]
 
 |MySQL 
 |jdbc:mysql://<hostname>:<port/3306>/<database>?user=<user>&password=<pass>
-|http://dev.mysql.com/downloads/connector/j/[MySQL Driver]
+|http://dev.mysql.com/downloads/connector/j/[MySQL Driver^]
 
 |PostgreSQL
 |jdbc:postgresql://<hostname>/<database>?user=<user>&password=<pass>
-|https://jdbc.postgresql.org/download.html[PostgreSQL JDBC Driver]
+|https://jdbc.postgresql.org/download.html[PostgreSQL JDBC Driver^]
 
 |===
