@@ -1,12 +1,11 @@
 [[neo4j-etl-cli]]
 == neo4j-etl Command Line Tool
 
-This is the command line tool you use to retrieve and map the metadata from your relational database and drive the export from the relational and import into Neo4j database.
+This is the command-line tool you use to retrieve and map the metadata from your relational database and drive the export from the relational and import into Neo4j database.
 
-Also, with the newly released user interface you can preview the resulting graph data model and eventually improve it by setting your favourite label and property names
-or relationships and property types.
+With the graphical user interface you can preview the resulting graph data model and eventually adapt it by changing labels, property names, relationship-types and property types.
 
-It supports all relational databases with a JDBC driver, for example *MySQL*, *PostgreSQL*, *Oracle* and *Microsoft SQL*.
+It supports all relational databases with a JDBC driver, like *MySQL*, *PostgreSQL*, *Oracle* and *Microsoft SQL*.
 
 You can get the http://github.com/neo4j-contrib/neo4j-etl/releases/latest[latest version of the import tool from GitHub].
 
@@ -33,11 +32,13 @@ NOTE: For very large databases make sure to have enough disk-space for the CSV e
 
 === Available commands
 
+////
 === 'help' command
 
 ----
 include::neo4j-etl-help.txt[]
 ----
+////
 
 === 'generate-metadata-mapping' command
 
@@ -51,12 +52,41 @@ include::neo4j-etl-generate-metadata-mapping.txt[]
 include::neo4j-etl-export.txt[]
 ----
 
+
+=== Parameters Usage
+
+----
+There are two ways for write Etl parameters:
+
+1) write parameters in command line:
+
+    $NEO4J_HOME/bin/neo4j-etl export|generate-metadata-mapping
+      --rdbms:url jdbc:oracle:thin:@localhost:49161:XE
+      --rdbms:user northwind --rdbms :password northwind
+      --rdbms:schema northwind
+      --using bulk:neo4j-import
+      --import-tool $NEO4J_HOME/bin
+      --csv-directory /tmp/northwind
+      --options-file /tmp/northwind/options.json
+      --quote '"' --force
+      ...
+
+2) use a config file:
+
+    $NEO4J_HOME/bin/neo4j-etl export|generate-metadata-mapping  \
+    --config-file <path to .config file>
+
+    Above there is an Example of config file.
+
+include::etl_config.txt[]
+----
+
 == Example Session: Basic
 
 === Generate Metadata Mapping
 
 ----
-export NEO4J_HOME=/path/to/neo4j-enterprise-3.3.0
+export NEO4J_HOME=/path/to/neo4j-enterprise-3.4.0
 
 mkdir -p /tmp/northwind
 
@@ -66,7 +96,7 @@ $NEO4J_HOME/bin/neo4j-etl generate-metadata-mapping \
   --rdbms:schema northwind --output-mapping-file /tmp/northwind/mapping.json
 ----
 
-=== Offline Bulk Import via `neo4j-import` tool for initial load (neo4j must be empty)
+=== Offline Bulk Import via `neo4j-import` tool for initial load (Neo4j database must be empty)
 
 ----
 echo '{ "multiline-fields" : "true" }' > /tmp/northwind/options.json
@@ -86,20 +116,20 @@ $NEO4J_HOME/bin/neo4j-etl export  \
 ----
 $NEO4J_HOME/bin/neo4j-shell -path $NEO4J_HOME/data/databases/graph.db/ -c 'MATCH (n) RETURN labels(n), count(*);'
 
-# +--------------------------+
-# | labels(n)     | count(*) |
-# +--------------------------+
-# | ["Shipper"]   | 3        |
-# | ["Employee"]  | 9        |
-# | ["Region"]    | 4        |
-# | ["Customer"]  | 93       |
-# | ["Territory"] | 53       |
-# | ["Product"]   | 77       |
-# | ["Supplier"]  | 29       |
-# | ["Order"]     | 830      |
-# | ["Category"]  | 8        |
-# +--------------------------+
-# 9 rows
+ +--------------------------+
+ | labels(n)     | count(*) |
+ +--------------------------+
+ | ["Shipper"]   | 3        |
+ | ["Employee"]  | 9        |
+ | ["Region"]    | 4        |
+ | ["Customer"]  | 93       |
+ | ["Territory"] | 53       |
+ | ["Product"]   | 77       |
+ | ["Supplier"]  | 29       |
+ | ["Order"]     | 830      |
+ | ["Category"]  | 8        |
+ +--------------------------+
+ 9 rows
 ----
 
 === Online Batch Import via `java-bolt-driver` for incremental load (neo4j can be already populated)
@@ -124,20 +154,20 @@ $NEO4J_HOME/bin/neo4j-etl export  \
 ----
 $NEO4J_HOME/bin/cypher-shell -a bolt://localhost:7687 -u neo4j -p neo4j 'MATCH (n) RETURN labels(n), count(*);'
 
-# +--------------------------+
-# | labels(n)     | count(*) |
-# +--------------------------+
-# | ["Shipper"]   | 3        |
-# | ["Employee"]  | 9        |
-# | ["Region"]    | 4        |
-# | ["Customer"]  | 93       |
-# | ["Territory"] | 53       |
-# | ["Product"]   | 77       |
-# | ["Supplier"]  | 29       |
-# | ["Order"]     | 830      |
-# | ["Category"]  | 8        |
-# +--------------------------+
-# 9 rows
+ +--------------------------+
+ | labels(n)     | count(*) |
+ +--------------------------+
+ | ["Shipper"]   | 3        |
+ | ["Employee"]  | 9        |
+ | ["Region"]    | 4        |
+ | ["Customer"]  | 93       |
+ | ["Territory"] | 53       |
+ | ["Product"]   | 77       |
+ | ["Supplier"]  | 29       |
+ | ["Order"]     | 830      |
+ | ["Category"]  | 8        |
+ +--------------------------+
+ 9 rows
 ----
 
 == Example Session: Docker + Northwind
@@ -188,7 +218,7 @@ Load the database via the following sql script:
 https://raw.githubusercontent.com/neo4j-contrib/neo4j-etl/master/neo4j-etl-it/src/main/resources/scripts/mysql/northwind.sql
 
 ----
-export NEO4J_HOME=/path/to/neo4j-enterprise-3.2.3
+export NEO4J_HOME=/path/to/neo4j-enterprise-3.4.0
 
 mkdir -p /tmp/northwind
 
@@ -227,7 +257,7 @@ Load the database via the following sql script:
 https://raw.githubusercontent.com/neo4j-contrib/neo4j-etl/master/neo4j-etl-it/src/main/resources/scripts/postgresql/northwind.sql[northwind.sql]
 
 ----
-export NEO4J_HOME=/path/to/neo4j-enterprise-3.2.3
+export NEO4J_HOME=/path/to/neo4j-enterprise-3.4.0
 
 mkdir -p /tmp/northwind
 
@@ -275,7 +305,7 @@ SQL> quit;
 
 root@692c446a274b:~# exit
 
-export NEO4J_HOME=/path/to/neo4j-enterprise-3.2.3
+export NEO4J_HOME=/path/to/neo4j-enterprise-3.4.0
 
 mkdir -p /tmp/northwind
 
@@ -308,7 +338,7 @@ docker exec -it neo4j-etl-mssql /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -
 ----
 
 ----
-export NEO4J_HOME=/path/to/neo4j-enterprise-3.2.3
+export NEO4J_HOME=/path/to/neo4j-enterprise-3.4.0
 
 mkdir -p /tmp/wideworldimporters
 

@@ -1,8 +1,9 @@
 = Neo4j ETL
+:img: img
 
 == Overview
 
-include::../README.adoc[lines=2..-1,leveloffset=+1]
+include::../README.adoc[lines=6..-1,leveloffset=+1]
 
 == Introduction
 
@@ -12,7 +13,7 @@ It applies some simple rules for transforming the relational model.
 The process as outlined below:
 
 . Read database metadata and generate mapping.json
-. Optionally edit mapping.json with the `neo4j-etl-ui`
+. Optionally edit mapping.json with the `neo4j-etl-ui` in Neo4j Desktop
 . Export relational data to CSV
 . Generate Mapping Headers
 . Import into Neo4j using
@@ -29,36 +30,37 @@ image::neo4j-etl-architecture.png[]
 
 * Command-Line tools 
 * Java API/library
-* Infer Schema to mapping file
+* Infer Schema and save in mapping file
 * Filter and merge strategies
-* Describe indexes
-* Non-trivial datatypes (dates, binary)
+// * Describe indexes
+// * Non-trivial datatypes (dates, binary)
 * Read mapping file to export data from other databases then
 * Import into Neo via different tools (`neo4j-import`, `neo4j-shell`, `cypher-shell`, `java bolt driver`)
 * Work in offline and online mode
 * Import in both an empty (initial load) and not-empty graph (incremental)
 * Build indexes and constraints
-* Non-trivial datatypes (dates, binary)
+// * Non-trivial datatypes (dates, binary)
 * Support on Unix-like and Microsoft Operating Systems
 * Support for most popular relational databases like MySQL, PostgreSQL, Oracle and Microsoft SQL
 * Support user specified JDBC drivers
-* UI tool to modify mappings
+* UI tool to visually modify mappings
 
 === Plans for the Future
 
 * Custom Mapping Rules + Transformations for names, data, links
 * Exemplary integration into a 3rd party ETL pipeline
+* More data types (binary, datetime, geo)
 
 === Who is it for
 
-* Developer learning or playing with Neo4j for initial data import
+* Developer learning to work with Neo4j for initial data import
 * Partners providing data integration with Neo4j
 * Enterprise developers building applications based on well modeled relational data
 
 === Open Questions
 
 * Date and binary datatypes
-* Security (secure connections, handling of passwords, encrypting data?)
+* Security (secure connections, handling of passwords, encrypting data)
 
 include::neo4j-etl.adoc[]
 
@@ -68,15 +70,18 @@ include::neo4j-etl.adoc[]
 
 * Generic relational database mapping based on the following rules
 * A _table_ with a foreign key is treated as a _Join_ and imported as a _node_ with a _relationship_
-* Ex: `+*Person* -> Address+` is imported as `+*(Person)-[:ADDRESS_ID]->*(Address)+`
+* Ex: `+Person -> Address+` is imported as `+(Person)-[:ADDRESS_ID]->(Address)+`
 * A _table_ that has two foreign keys is imported as a _JoinTable_ and imported as a _relationship_
-* Ex: `+Student <- *Student_Course* -> Course+` is imported as  +
-`+(Student) -[*:STUDENT_COURSE*]-> (Course)+`
+* Ex: `+Student <- Student_Course -> Course+` is imported as  +
+`+(Student) -[:STUDENT_COURSE]-> (Course)+`
 * A _table_ that has more than two foreign keys is treated as an _intermediate node_ and imported as _node with multiple relationships_
-* Ex: `+*Order_Detail* -> Shipping_Address, *Order_Detail* -> Payment_Information, *Order_Detail* -> Shipment_Instructions+` is imported as, +
- `+(Shipping_Address) *-[:SHIPPING]-> (Order_Detail)*#` +
- `+(Payment_Information) *-[:PAYMENT]-> (Order_Detail)*+` +
- `+(Shipment_Instructions) *-[:SHIPMENT]-> (Order_Detail)*+` +
+* Ex: `+Order_Detail -> Shipping_Address, Order_Detail -> Payment_Information, Order_Detail -> Shipment_Instructions+` is imported as
+
+----
+(Shipping_Address) -[:SHIPPING]-> (Order_Detail)
+(Payment_Information) -[:PAYMENT]-> (Order_Detail)
+(Shipment_Instructions) -[:SHIPMENT]-> (Order_Detail)
+----
 
 
 * Resolve relationships through composite keys.
@@ -87,8 +92,8 @@ include::neo4j-etl.adoc[]
 ** _Decimal to be confirmed._
 
 * Relationship names can either take _column name_ or the _table that is being referred to_
-** `--relationship-name=table` then a `Person->Address` will become `(Person)-[*:ADDRESS*]->(Address)`
-** `--relationship-name=column` will become `(Person)-[*:ADDRESS_ID*]->(Address)`
+** `--relationship-name=table` then a `+Person->Address+` will become `+(Person)-[:ADDRESS]->(Address)+`
+** `--relationship-name=column` will become `+(Person)-[:ADDRESS_ID]->(Address)+`
 
 * Filter tables that you want to include or exclude using `--include` and `--exclude`
 

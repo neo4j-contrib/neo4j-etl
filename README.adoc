@@ -9,16 +9,16 @@ Neo4j ETL allows importing data from relational databases into Neo4j.
 
 == Features
 
-// * Wizard UI in Neo4j Desktop
-* Manage multiple rdbms connections
+* Wizard UI in Neo4j Desktop
+* Manage multiple RDBMS connections
 * automatically extract database metadata from relational database
 * derive graph model
 * visually edit labels, relationship-types, property-names and types
 * visualize current model as a graph
 * persist mapping as json
-* dump relevant CSV from relational databases
+* retrieve relevant CSV data from relational databases
 * run import via neo4j-import, bolt-connector, cypher-shell, neo4j-shell
-* bundles mysql, postgres, allows custom jdbc driver with Neo4j Enterprise
+* bundles MySQL, PostgreSQL, allows custom JDBC driver with Neo4j Enterprise
 
 == License
 
@@ -55,21 +55,9 @@ Download & unzip the latest https://github.com/neo4j-contrib/neo4j-etl/releases/
 
 For detailed usage see also the: http://neo4j-contrib.github.io/neo4j-etl#neo4j-etl-cli[tool documentation].
 
-////
 == Neo4j-Desktop
 
-You can add Neo4j ETL to Neo4j Desktop by adding the following lines to your `$DESKTOP/Application/graphApps.json`
-
-[source,json]
-----
-[
-    {
-        "appId": "neo4j-etl-ui",
-        "appName": "ETL App",
-        "packageUrl": "https://neo.jfrog.io/neo/api/npm/npm/neo4j-etl-ui"
-    }
-]
-----
+You can add Neo4j ETL to Neo4j Desktop by adding the appropriate application key.
 
 Then the next time you start Neo4j Desktop you'll see Neo4j ETL as a UI to be used interactively.
 
@@ -85,32 +73,57 @@ Then the next time you start Neo4j Desktop you'll see Neo4j ETL as a UI to be us
 | image:{img}/import-data.jpg[width=200]
 |===
 
+////
 .Location of $DESKTOP
 |===
 | macOS | ~/Library/Application Support/Neo4j Desktop |
 | Windows | %APPDATA%/Neo4j Desktop |
 | Linux | ~/.config/Neo4j Desktop |
 |===
-
 ////
 
 == JDBC Drivers
 
-Neo4j ETL bundles drivers for MySQL and PostgreSQL, for other database if you use Neo4j Enterprise you can specify your own JDBC driver.
+The drivers for MySQL and PostgreSQL are bundled with the Neo4j-ETL tool.
 
-[[jdbc-drivers]]
+To use other JDBC drivers use these download links and JDBC URLs.
+Provide the JDBC driver jar-file to the command line tool or Neo4j-ETL application.
+And use the JDBC-URL with the `--rdbms:url` parameter or in the JDBC-URL input field.
+
+[options="header",cols="a,3m,a"]
 |===
-|Vendor |JDBC Driver URL
+|Database | JDBC-URL | Driver Source
 
-|https://www.mysql.com/[MySql]
-|http://dev.mysql.com/downloads/connector/j/
+|Oracle
+|jdbc:oracle:thin:<user>/<pass>@<host>:<port>/<service_name>
+|http://www.oracle.com/technetwork/database/features/jdbc/index.html[Oracle JDBC Driver]
 
-|http://www.postgresql.com/[PostgreSQL]
-|https://jdbc.postgresql.org/download.html
+|MS SQLServer
+|jdbc:sqlserver://;servername=<servername>;databaseName=<database>;user=<user>;password=<pass>
+|https://www.microsoft.com/en-us/download/details.aspx?id=11774[SQLServer Driver]
 
-|https://www.oracle.com/[Oracle]
-|http://www.oracle.com/technetwork/database/features/jdbc/default-2280470.html
+|IBM DB2
+|jdbc:db2://<host>:<port/5021>/<database>:user=<user>;password=<pass>;
+|http://www-01.ibm.com/support/docview.wss?uid=swg21363866[DB2 Driver]
 
-|https://www.microsoft.com/en-us/sql-server/[Microsoft SQL Server]
-|https://www.microsoft.com/en-us/download/details.aspx?id=55539
+|Derby
+|jdbc:derby:derbyDB
+|Included since JDK6
+
+|Cassandra 
+|jdbc:cassandra://<host>:<port/9042>/<database>
+|link:https://github.com/adejanovski/cassandra-jdbc-wrapper#installing[Cassandra JDBC Wrapper]
+
+|SAP Hana
+|jdbc:sap://<host>:<port/39015>/?user=<user>&password=<pass>
+|https://www.sap.com/developer/tutorials/hxe-connect-hxe-using-jdbc.html[SAP Hana ngdbc Driver]
+
+|MySQL 
+|jdbc:mysql://<hostname>:<port/3306>/<database>?user=<user>&password=<pass>
+|http://dev.mysql.com/downloads/connector/j/[MySQL Driver]
+
+|PostgreSQL
+|jdbc:postgresql://<hostname>/<database>?user=<user>&password=<pass>
+|https://jdbc.postgresql.org/download.html[PostgreSQL JDBC Driver]
+
 |===
