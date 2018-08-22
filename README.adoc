@@ -124,3 +124,5 @@ And use the JDBC-URL with the `--rdbms:url` parameter or in the JDBC-URL input f
 |https://jdbc.postgresql.org/download.html[PostgreSQL JDBC Driver^]
 
 |===
+
+For more information and help, see our https://neo4j.com/developer/neo4j-etl/[developer guide^] on the Neo4j website.
