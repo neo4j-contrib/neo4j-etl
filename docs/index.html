@@ -1651,6 +1651,7 @@ echo '{"multiline-fields":"true"}' &gt; /tmp/wideworldimporters/options.json
 <div class="content">
 <pre># Create docker instance for MS-SQL Server
 docker run --name mssql-etl \
+-e MSSQL_COLLATION=Latin1_General_100_CI_AS \
 -e 'ACCEPT_EULA=Y' \
 -e 'SA_PASSWORD=&lt;YOUR_PASSWORD&gt;' \
 -p 1433:1433 \
