@@ -43,25 +43,26 @@ Download & unzip the latest https://github.com/neo4j-contrib/neo4j-etl/releases/
 ----
 ./bin/neo4j-etl export \
  --rdbms:url <url> --rdbms:user <user> --rdbms:password <password> --rdbms:schema <schema> \
- --using { bulk:neo4j-import | cypher:neo4j-shell | cypher:shell | cypher:direct } \
+ --using { bulk:neo4j-import | cypher:neo4j-shell | cypher:shell | cypher:direct | cypher:batch | cypher:fromSQL } \
  --neo4j:url <neo4j url> --neo4j:user <neo4j user> --neo4j:password <neo4j password> \
  --destination $NEO4J_HOME/data/databases/graph.db/ --import-tool $NEO4J_HOME/bin \
  --csv-directory $NEO4J_HOME/import --options-file import-tool-options.json --force --debug
+----
+
+.Additional command line options for `cypher:batch` and `cypher:fromSQL` import modes:
+----
+ --unwind-batch-size <value> (Batch size that will be used for unwind data) \
+ --tx-batch-size <value> (Transaction Batch size that will be used for unwind commit) \
 ----
 
 For detailed usage see also the: http://neo4j-contrib.github.io/neo4j-etl#neo4j-etl-cli[tool documentation].
 
 == Neo4j-Desktop
 
-=== Install in Neo4j Desktop
-
 Use the Application URL `https://r.neo4j.com/neo4j-etl-app` in the "Graph Apps" tab of Neo4j Desktop.
 
 image:{img}/neo4j-etl-install.jpg[width=400]
 image:{img}/graph-app-icon.jpg[width=400]
-
-// You can add Neo4j ETL to Neo4j Desktop by adding the appropriate application key.
-// Please ask your Neo4j contact or send an email to link:mailto:devrel@neo4j.com[devrel@neo4j.com^]
 
 Then the next time you start Neo4j Desktop you'll see Neo4j ETL as a UI to be used interactively.
 
@@ -77,8 +78,6 @@ Then the next time you start Neo4j Desktop you'll see Neo4j ETL as a UI to be us
 | image:{img}/import-data.jpg[width=200]
 |===
 
-We put https://neo4j.com/developer/neo4j-etl[detailed usage instructions for the Neo4j ETL Tool] in the Neo4j Developer Pages.
-
 ////
 .Location of $DESKTOP
 |===
@@ -86,6 +85,18 @@ We put https://neo4j.com/developer/neo4j-etl[detailed usage instructions for the
 | Windows | %APPDATA%/Neo4j Desktop |
 | Linux | ~/.config/Neo4j Desktop |
 |===
+////
+
+We put https://neo4j.com/developer/neo4j-etl[detailed usage instructions for the Neo4j ETL Tool] in the Neo4j Developer Pages.
+
+////
+If you want to test changes to the Neo4j Desktop UI, you can try:
+
+* Make necessary changes
+* npm install && yarn start to verify UI runs
+* Install the production ETL tool in Neo4j Desktop 
+* Replace the relevant JavaScript in $DESKTOP 
+* Re-run the Neo4j Desktop App and veify UI and functionality are as expected
 ////
 
 == JDBC Drivers
@@ -133,5 +144,3 @@ And use the JDBC-URL with the `--rdbms:url` parameter or in the JDBC-URL input f
 |https://jdbc.postgresql.org/download.html[PostgreSQL JDBC Driver^]
 
 |===
-
-For more information and help, see our https://neo4j.com/developer/neo4j-etl/[developer guide^] on the Neo4j website.

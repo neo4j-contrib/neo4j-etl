@@ -1,0 +1,75 @@
+= Testing
+
+Northwind database scripts are downloaded from https://code.google.com/archive/p/northwindextended/downloads
+
+== Integration Tests
+
+You can run the tests with 
+
+* a local instance,
+* a https://www.docker.com/[Docker] instance,
+* https://www.vagrantup.com/[Vagrant]
+* or in AWS.
+
+You will need a RDBMS user `neo4j` with password `neo4j` with admin privileges to run the tests.
+
+To run the tests in AWS, you'll need an AWS IAM user.
+
+To run the tests using a local instance:
+
+.Grant all privileges to the user `neo4j` identified by password `neo4j`
+
+MySQL:
+----
+CREATE USER 'neo4j'@'localhost' IDENTIFIED BY 'neo4j';
+GRANT ALL PRIVILEGES ON *.* TO 'neo4j'@'localhost' WITH GRANT OPTION;
+FLUSH PRIVILEGES;
+----
+PostgreSQL:
+----
+CREATE USER neo4j WITH SUPERUSER ENCRYPTED PASSWORD 'neo4j';
+----
+Oracle:
+----
+CREATE USER neo4j IDENTIFIED BY neo4j;
+GRANT DBA TO neo4j;
+----
+For Oracle, you'll need to add the Oracle Driver to your local Maven repository manually:
+----
+mvn install:install-file -Dfile={Path/to/your/ojdbc7.jar} \
+      -DgroupId=com.oracle -DartifactId=ojdbc7 -Dversion=12.1.0.2 -Dpackaging=jar
+----
+Microsoft SQL:
+
+Currently the integration tests use the default user "sa".
+
+
+To run the tests locally:
+
+`mvn -P integration-test clean test`
+
+To run the tests using Vagrant:
+
+`mvn -P integration-test -D PLATFORM=vagrant clean test`
+
+To run the tests using AWS:
+
+Note: You need to create AWS Keypair and have the credentials file created to do this
+
+`mvn -P integration-test -D PLATFORM=aws -D EC2_SSH_KEY=<name of your EC2 SSH key> clean test`
+
+== Performance Tests
+
+Set of tests that are part of the `neo4j-etl-it` module.
+
+However, they are skipped usually when you run the integration-test target by default. You can run them separately as part of a test suite.
+
+To run performance tests locally:
+
+`mvn -P performance-test clean dependency:copy-dependencies test -D failIfNoTests=false -D EC2_SSH_KEY=<name of your EC2 SSH key>`
+
+To run performance tests in AWS:
+
+`mvn -P performance-test clean dependency:copy-dependencies test -D PLATFORM=aws -D failIfNoTests=false -D EC2_SSH_KEY=<name of your EC2 SSH key>`
+
+
