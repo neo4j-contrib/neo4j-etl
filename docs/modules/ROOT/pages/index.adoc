@@ -1,0 +1,120 @@
+= Neo4j ETL
+
+== Overview
+
+include::README.adoc[lines=6..-1,leveloffset=+1]
+
+== Introduction
+
+The Neo4j ETL, especially the `neo4j-etl` command-line tool, can be used to import well modeled (i.e. normalized) relational data into Neo4j.
+It applies some simple rules for transforming the relational model.
+
+The process as outlined below:
+
+. Read database metadata and generate mapping.json
+. Optionally edit mapping.json with the `neo4j-etl-ui` in Neo4j Desktop
+. Export relational data to CSV
+. Generate Mapping Headers
+. Import into Neo4j using
+.. the `neo4j-import` tool for initial *offline* bulk load
+.. the `neo4j-shell` tool for incremental *offline* bulk load
+.. the `cypher-shell` tool for incremental *online* single-transaction load
+.. the `java bolt driver` for incremental *online* batch load
+
+== Architecture Diagram
+
+image::neo4j-etl-architecture.png[]
+
+=== What it is
+
+* Command-Line tools 
+* Java API/library
+* Infer Schema and save in mapping file
+* Filter and merge strategies
+// * Describe indexes
+// * Non-trivial datatypes (dates, binary)
+* Read mapping file to export data from other databases then
+* Import into Neo via different tools (`neo4j-import`, `neo4j-shell`, `cypher-shell`, `java bolt driver`)
+* Work in offline and online mode
+* Import in both an empty (initial load) and not-empty graph (incremental)
+* Build indexes and constraints
+// * Non-trivial datatypes (dates, binary)
+* Support on Unix-like and Microsoft Operating Systems
+* Support for most popular relational databases like MySQL, PostgreSQL, Oracle and Microsoft SQL
+* Support user specified JDBC drivers
+* UI tool to visually modify mappings
+
+=== Plans for the Future
+
+* Custom Mapping Rules + Transformations for names, data, links
+* Exemplary integration into a 3rd party ETL pipeline
+* More data types (binary, datetime, geo)
+
+=== Who is it for
+
+* Developer learning to work with Neo4j for initial data import
+* Partners providing data integration with Neo4j
+* Enterprise developers building applications based on well modeled relational data
+
+=== Open Questions
+
+* Date and binary datatypes
+* Security (secure connections, handling of passwords, encrypting data)
+
+include::neo4j-etl.adoc[]
+
+== Capabilities
+
+=== Inferring Schema with Mapping Rules (generate-metadata-mapping)
+
+* Generic relational database mapping based on the following rules
+* A _table_ with a foreign key is treated as a _Join_ and imported as a _node_ with a _relationship_
+* Ex: `+Person -> Address+` is imported as `+(Person)-[:ADDRESS_ID]->(Address)+`
+* A _table_ that has two foreign keys is imported as a _JoinTable_ and imported as a _relationship_
+* Ex: `+Student <- Student_Course -> Course+` is imported as  +
+`+(Student) -[:STUDENT_COURSE]-> (Course)+`
+* A _table_ that has more than two foreign keys is treated as an _intermediate node_ and imported as _node with multiple relationships_
+* Ex: `+Order_Detail -> Shipping_Address, Order_Detail -> Payment_Information, Order_Detail -> Shipment_Instructions+` is imported as
+
+----
+(Shipping_Address) -[:SHIPPING]-> (Order_Detail)
+(Payment_Information) -[:PAYMENT]-> (Order_Detail)
+(Shipment_Instructions) -[:SHIPMENT]-> (Order_Detail)
+----
+
+
+* Resolve relationships through composite keys.
+* Support most of the data types.
+** _TinyInt_ can be imported as either _Byte_ or as a _Boolean_ _(This is to support boolean values being saved in mysql as TinyInt)_
+** _Dates_ are imported as _String_
+** _Blobs_ are skipped while importing until the import-tool supports binary array data.
+** _Decimal to be confirmed._
+
+* Relationship names can either take _column name_ or the _table that is being referred to_
+** `--relationship-name=table` then a `+Person->Address+` will become `+(Person)-[:ADDRESS]->(Address)+`
+** `--relationship-name=column` will become `+(Person)-[:ADDRESS_ID]->(Address)+`
+
+* Filter tables that you want to include or exclude using `--include` and `--exclude`
+
+* TODO: Filter columns that you want to include or exclude using `--include` and `--exclude`
+
+* TODO: Retaining natural keys(marked as PrimaryKeys and ForeignKeys) as needed using <TBA> flag
+** A Foreign Key is usually used to create a relationship between 2 nodes without being saved as a property. 
+** With this flag, the node would keep that value as a property. 
+** Ex: A loan has the SSN of the loan applicant which would normally be used to connect the `Loan` and `Person` nodes. 
+** With this flag the `Loan` node will also keep the `SSN` as a property.
+
+=== Edit Mapping via UI
+
+A Neo4j-ETL graph application can be added Neo4j Desktop which allows visual editing of the mapping and interactive import.
+
+The UI allows you to change and set you preferred *label* names, *property* names and types, *relationship* types, with a preview of the resulting graph.
+
+=== Exporting Data (export)
+
+* Generate CSV files from relational source as outlined by `mappings.json` 
+** TODO: Use a streaming api that is more performant
+* Import CSV providing the correct labels and rel-types and headers headers
+** TODO: Missing ability to pass options to `neo4j-import` tool as a file instead of command line arguments
+** TODO: Create indexes and constraints related to not-primary key columns
+ 

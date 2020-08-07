@@ -1,0 +1,139 @@
+= Neo4j ETL
+
+Neo4j ETL allows importing data from relational databases into Neo4j.
+
+== Features
+
+* Neo4j-ETL UI in Neo4j Desktop
+* Manage multiple RDBMS connections
+* automatically extract database metadata from relational database
+* derive graph model
+* visually edit labels, relationship-types, property-names and types
+* visualize current model as a graph
+* persist mapping as json
+* retrieve relevant CSV data from relational databases
+* run import via neo4j-import, bolt-connector, cypher-shell, neo4j-shell
+* bundles MySQL, PostgreSQL, allows custom JDBC driver with Neo4j Enterprise
+
+== License
+
+This tool is licensed under the xref:LICENSE.txt[NEO4J PRE-RELEASE LICENSE AGREEMENT].
+
+== Issues & Feedback & Contributions
+
+* You can raise link:https://github.com/neo-technology/neo4j-etl/issues[GitHub issues] or send feedback to feedback@neo4j.com
+* Please also join our http://neo4j.com/slack[neo4j-users Slack] and ask in the  #help-import channel
+
+== Download & Run
+
+Download & unzip the latest https://github.com/neo4j-contrib/neo4j-etl/releases/latest[neo4j-etl.zip^].
+
+== Examples of command usage:
+
+.Minimal command line
+----
+./bin/neo4j-etl export \
+ --rdbms:url <url> --rdbms:user <user> --rdbms:password <password> \
+ --destination $NEO4J_HOME/data/databases/graph.db/ --import-tool $NEO4J_HOME/bin \
+ --csv-directory $NEO4J_HOME/import
+----
+
+.Full set of command line options
+----
+./bin/neo4j-etl export \
+ --rdbms:url <url> --rdbms:user <user> --rdbms:password <password> --rdbms:schema <schema> \
+ --using { bulk:neo4j-import | cypher:neo4j-shell | cypher:shell | cypher:direct | cypher:batch | cypher:fromSQL } \
+ --neo4j:url <neo4j url> --neo4j:user <neo4j user> --neo4j:password <neo4j password> \
+ --destination $NEO4J_HOME/data/databases/graph.db/ --import-tool $NEO4J_HOME/bin \
+ --csv-directory $NEO4J_HOME/import --options-file import-tool-options.json --force --debug
+----
+
+.Additional command line options for `cypher:batch` and `cypher:fromSQL` import modes:
+----
+ --unwind-batch-size <value> (Batch size that will be used for unwind data) \
+ --tx-batch-size <value> (Transaction Batch size that will be used for unwind commit) \
+----
+
+For detailed usage see also the: http://neo4j-contrib.github.io/neo4j-etl#neo4j-etl-cli[tool documentation].
+
+== Neo4j-Desktop
+
+You can add Neo4j ETL to Neo4j Desktop by adding the appropriate application key.
+Please ask your Neo4j contact or send an email to link:mailto:devrel@neo4j.com[devrel@neo4j.com^]
+
+Then the next time you start Neo4j Desktop you'll see Neo4j ETL as a UI to be used interactively.
+
+[cols="4*^.^",opts=header]
+|===
+| Configure Driver
+| Load Mapping
+| Edit Mapping
+| Import Data
+| image::driver.jpg[width=200]
+| image::load-mapping.jpg[width=200]
+| image::edit-mapping.jpg[width=200]
+| image::import-data.jpg[width=200]
+|===
+
+////
+.Location of $DESKTOP
+|===
+| macOS | ~/Library/Application Support/Neo4j Desktop |
+| Windows | %APPDATA%/Neo4j Desktop |
+| Linux | ~/.config/Neo4j Desktop |
+|===
+////
+
+If you want to test changes to the Neo4j Desktop UI, you can try:
+
+* Make necessary changes
+* npm install && yarn start to verify UI runs
+* Install the production ETL tool in Neo4j Desktop 
+* Replace the relevant JavaScript in $DESKTOP 
+* Re-run the Neo4j Desktop App and veify UI and functionality are as expected
+
+== JDBC Drivers
+
+The drivers for MySQL and PostgreSQL are bundled with the Neo4j-ETL tool.
+
+To use other JDBC drivers use these download links and JDBC URLs.
+Provide the JDBC driver jar-file to the command line tool or Neo4j-ETL application.
+And use the JDBC-URL with the `--rdbms:url` parameter or in the JDBC-URL input field.
+
+[options="header",cols="a,3m,a"]
+|===
+|Database | JDBC-URL | Driver Source
+
+|Oracle
+|jdbc:oracle:thin:<user>/<pass>@<host>:<port>/<service_name>
+|http://www.oracle.com/technetwork/database/features/jdbc/index.html[Oracle JDBC Driver^]
+
+|MS SQLServer
+|jdbc:sqlserver://;servername=<servername>;databaseName=<database>;user=<user>;password=<pass>
+|https://www.microsoft.com/en-us/download/details.aspx?id=11774[SQLServer Driver^]
+
+|IBM DB2
+|jdbc:db2://<host>:<port/5021>/<database>:user=<user>;password=<pass>;
+|http://www-01.ibm.com/support/docview.wss?uid=swg21363866[DB2 Driver^]
+
+|Derby
+|jdbc:derby:derbyDB
+|Included since JDK6
+
+|Cassandra 
+|jdbc:cassandra://<host>:<port/9042>/<database>
+|link:https://github.com/adejanovski/cassandra-jdbc-wrapper#installing[Cassandra JDBC Wrapper^]
+
+|SAP Hana
+|jdbc:sap://<host>:<port/39015>/?user=<user>&password=<pass>
+|https://www.sap.com/developer/tutorials/hxe-connect-hxe-using-jdbc.html[SAP Hana ngdbc Driver^]
+
+|MySQL 
+|jdbc:mysql://<hostname>:<port/3306>/<database>?user=<user>&password=<pass>
+|http://dev.mysql.com/downloads/connector/j/[MySQL Driver^]
+
+|PostgreSQL
+|jdbc:postgresql://<hostname>/<database>?user=<user>&password=<pass>
+|https://jdbc.postgresql.org/download.html[PostgreSQL JDBC Driver^]
+
+|===

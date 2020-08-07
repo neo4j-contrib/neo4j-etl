@@ -1,0 +1,30 @@
+#EXAMPLE - ETL CONFIG FILE
+
+#RDBMS 
+rdbms-url=url
+rdbms-schema=schema
+rdbms-password=neo4j
+rdbms-user=neo4j
+rdbms-fetch-size=10000
+
+#NEO4J
+using=cypher:direct
+neo4j-url=bolt://127.0.0.1:7687
+neo4j-user=neo4j
+neo4j-password=neo4j
+
+#RULES
+exclusion-mode-tables=INCLUDE
+tables=-l table1,table2,...
+exclusion-mode-columns=INCLUDE
+columns=-l column1,column2,...
+exclusion-mode-column-types=EXCLUDE
+column-types=type1,type2,...
+
+#MISC
+output-mapping-file=path_to_output_mapping_file
+import-tool=path_to_import_tool
+csv-directory=path_to_directory
+mapping-file=path_to_file
+
+debug=false
