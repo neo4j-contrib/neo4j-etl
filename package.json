@@ -1,0 +1,18 @@
+{
+  "name": "@neo4j/docs",
+  "version": "1.5.0",
+  "description": "Neo4j ETL Docs builder",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js",
+    "build:docs": "antora --fetch --stacktrace docs.yml"
+  },
+  "license": "ISC",
+  "dependencies": {
+    "@antora/cli": "^2.3.3",
+    "@antora/site-generator-default": "^2.3.3"
+  },
+  "devDependencies": {
+    "express": "^4.17.1"
+  }
+}

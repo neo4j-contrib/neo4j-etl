@@ -1,0 +1,11 @@
+name: neo4j-etl-docs
+version: 1.5.0
+title: Neo4j ETL Docs
+start_page: ROOT:index.adoc
+nav:
+  - modules/ROOT/nav.adoc
+
+asciidoc:
+  attributes:
+    theme: docs
+    version: 1.5.0

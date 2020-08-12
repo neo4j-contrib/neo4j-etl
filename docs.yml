@@ -1,0 +1,16 @@
+site:
+  title: Neo4j ETL User Guide
+  url: /neo4j-etl-docs
+content:
+  sources:
+    - url: https://github.com/neo4j-contrib/neo4j-etl
+      branches: master
+      start_path: docs
+ui:
+  bundle:
+    url: https://github.com/neo4j-documentation/docs-refresh/raw/master/ui/build/ui-bundle.zip
+    snapshot: true
+asciidoc:
+  attributes:
+    page-theme: docs
+    page-cdn: /_/
