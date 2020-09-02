@@ -69,10 +69,10 @@ Then the next time you start Neo4j Desktop you'll see Neo4j ETL as a UI to be us
 | Load Mapping
 | Edit Mapping
 | Import Data
-| image::driver.jpg[width=200]
-| image::load-mapping.jpg[width=200]
-| image::edit-mapping.jpg[width=200]
-| image::import-data.jpg[width=200]
+| image:driver.jpg[width=200]
+| image:load-mapping.jpg[width=200]
+| image:edit-mapping.jpg[width=200]
+| image:import-data.jpg[width=200]
 |===
 
 ////
@@ -88,8 +88,8 @@ If you want to test changes to the Neo4j Desktop UI, you can try:
 
 * Make necessary changes
 * npm install && yarn start to verify UI runs
-* Install the production ETL tool in Neo4j Desktop 
-* Replace the relevant JavaScript in $DESKTOP 
+* Install the production ETL tool in Neo4j Desktop
+* Replace the relevant JavaScript in $DESKTOP
 * Re-run the Neo4j Desktop App and veify UI and functionality are as expected
 
 == JDBC Drivers
@@ -120,7 +120,7 @@ And use the JDBC-URL with the `--rdbms:url` parameter or in the JDBC-URL input f
 |jdbc:derby:derbyDB
 |Included since JDK6
 
-|Cassandra 
+|Cassandra
 |jdbc:cassandra://<host>:<port/9042>/<database>
 |link:https://github.com/adejanovski/cassandra-jdbc-wrapper#installing[Cassandra JDBC Wrapper^]
 
@@ -128,7 +128,7 @@ And use the JDBC-URL with the `--rdbms:url` parameter or in the JDBC-URL input f
 |jdbc:sap://<host>:<port/39015>/?user=<user>&password=<pass>
 |https://www.sap.com/developer/tutorials/hxe-connect-hxe-using-jdbc.html[SAP Hana ngdbc Driver^]
 
-|MySQL 
+|MySQL
 |jdbc:mysql://<hostname>:<port/3306>/<database>?user=<user>&password=<pass>
 |http://dev.mysql.com/downloads/connector/j/[MySQL Driver^]
 

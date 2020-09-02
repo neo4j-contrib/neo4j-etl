@@ -3,7 +3,7 @@ site:
   url: /neo4j-etl-docs
 content:
   sources:
-    - url: https://github.com/neo4j-contrib/neo4j-etl
+    - url: .
       branches: master
       start_path: docs
 ui:
