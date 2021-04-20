@@ -9,3 +9,5 @@ asciidoc:
   attributes:
     version: 1.5.0
     page-product: ETL Tool
+    page-type: Neo4j ETL Tool Manual
+    page-canonical-root: /labs
