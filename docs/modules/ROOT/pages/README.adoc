@@ -17,7 +17,7 @@ Neo4j ETL allows importing data from relational databases into Neo4j.
 
 == License
 
-This tool is licensed under the xref:LICENSE.txt[NEO4J PRE-RELEASE LICENSE AGREEMENT].
+This tool is licensed under the xref:example$LICENSE.txt[NEO4J PRE-RELEASE LICENSE AGREEMENT].
 
 == Issues & Feedback & Contributions
 
