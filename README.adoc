@@ -23,9 +23,9 @@ This tool is licensed under the link:LICENSE.txt[NEO4J PRE-RELEASE LICENSE AGREE
 == Issues & Feedback & Contributions
 
 * You can raise link:issues[GitHub issues] or send feedback to feedback@neo4j.com
-* Please also join our https://community.neo4j.com/c/neo4j-graph-platform/etl[Community Site] ask in the appropriate category
+* Please also join our http://neo4j.com/slack[neo4j-users Slack] and ask in the  #help-import channel
 
-== Download & Run Command Line Tool
+== Download & Run
 
 Download & unzip the latest https://github.com/neo4j-contrib/neo4j-etl/releases/latest[neo4j-etl.zip^].
 
@@ -59,10 +59,8 @@ For detailed usage see also the: http://neo4j-contrib.github.io/neo4j-etl#neo4j-
 
 == Neo4j-Desktop
 
-Use the Application URL `https://r.neo4j.com/neo4j-etl-app` in the "Graph Apps" tab of Neo4j Desktop.
-
-image:{img}/neo4j-etl-install.jpg[width=400]
-image:{img}/graph-app-icon.jpg[width=400]
+You can add Neo4j ETL to Neo4j Desktop by adding the appropriate application key.
+Please ask your Neo4j contact or send an email to link:mailto:devrel@neo4j.com[devrel@neo4j.com^]
 
 Then the next time you start Neo4j Desktop you'll see Neo4j ETL as a UI to be used interactively.
 
@@ -87,9 +85,6 @@ Then the next time you start Neo4j Desktop you'll see Neo4j ETL as a UI to be us
 |===
 ////
 
-We put https://neo4j.com/developer/neo4j-etl[detailed usage instructions for the Neo4j ETL Tool] in the Neo4j Developer Pages.
-
-////
 If you want to test changes to the Neo4j Desktop UI, you can try:
 
 * Make necessary changes
@@ -97,7 +92,6 @@ If you want to test changes to the Neo4j Desktop UI, you can try:
 * Install the production ETL tool in Neo4j Desktop 
 * Replace the relevant JavaScript in $DESKTOP 
 * Re-run the Neo4j Desktop App and veify UI and functionality are as expected
-////
 
 == JDBC Drivers
 
